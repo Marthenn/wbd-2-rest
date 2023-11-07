@@ -10,7 +10,7 @@ import {
 import { Book } from './book.model'
 
 @Entity()
-export class Author {
+export class Author extends BaseEntity {
     @PrimaryGeneratedColumn({name:'author_id'})
     authorId: number
 
