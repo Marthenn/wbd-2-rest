@@ -9,6 +9,7 @@ import {
 
 import { Duration } from 'ts-duration'
 
+import { Account } from './account.model'
 import { Chapter } from './chapter.model'
 
 @Entity()
@@ -22,4 +23,8 @@ export class History extends BaseEntity {
 
     @Column({name: 'curr_duration'})
     currDuration: Duration
+
+    @ManyToOne(type => Account)
+    @JoinColumn({name:'uid'})
+    account: Account
 }

@@ -2,11 +2,13 @@ import {
     BaseEntity,
     Entity,
     PrimaryGeneratedColumn,
-    Column,
     ManyToMany,
+    ManyToOne,
+    JoinColumn,
     JoinTable
 } from 'typeorm'
 
+import { Account } from './account.model'
 import { Book } from './book.model'
 
 @Entity('favorite')
@@ -27,4 +29,8 @@ export class Favorite extends BaseEntity {
         }
     })
     books: Book[]
+
+    @ManyToOne(type => Account)
+    @JoinColumn({name:'uid'})
+    account: Account
 }
