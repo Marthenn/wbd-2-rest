@@ -10,7 +10,9 @@ import {Favorite} from "../models/favorite.model";
 import {History} from "../models/history.model";
 import {AccountSubscriber} from "../subscribers/account.subscriber";
 import * as dotenv from 'dotenv';
+
 dotenv.config({path: '.env'})
+
 const generatePostgreHost = () => {
     return process.env.DB_HOST ? process.env.DB_HOST : 'localhost';
 }

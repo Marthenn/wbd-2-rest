@@ -1,4 +1,7 @@
 import { Secret } from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
+
+dotenv.config({path: '.env'})
 
 const generateSecret = () => {
     return process.env.JWT_SECRET_KEY ? process.env.JWT_SECRET_KEY : Math.random().toString();
