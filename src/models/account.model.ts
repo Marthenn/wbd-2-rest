@@ -32,15 +32,15 @@ export class Account extends BaseEntity {
     @Column({name:'is_admin'})
     isAdmin: boolean
 
-    @OneToOne(type => FaceID)
-    @JoinColumn({name:'uid'})
-    faceId: FaceID
+    // @OneToOne(() => FaceID, {nullable: true})
+    // @JoinColumn({name:'uid'})
+    // faceId: FaceID
 
-    @OneToMany(type => History, history => history.account)
+    @OneToMany(() => History, history => history.account)
     @JoinColumn({name:'uid'})
     histories: History[]
 
-    @OneToMany(type => Favorite, favorite => favorite.account)
+    @OneToMany(() => Favorite, favorite => favorite.account)
     @JoinColumn({name:'uid'})
     favorites: Favorite[]
 }

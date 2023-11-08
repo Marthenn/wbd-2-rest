@@ -4,11 +4,8 @@ import {
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
-    OneToMany,
     JoinColumn
 } from "typeorm";
-
-import { Duration } from 'ts-duration'
 
 import { Author } from './author.model'
 import { Category } from './category.model'
@@ -27,11 +24,11 @@ export class Book extends BaseEntity {
     @Column({nullable: true})
     rating: number
 
-    @ManyToOne(type => Author, (Author) => Author.books)
+    @ManyToOne(() => Author, (Author) => Author.books)
     @JoinColumn({name: 'author_id'})
     author: Author
 
-    @ManyToOne(type => Category, (Category) => Category.books)
+    @ManyToOne(() => Category, (Category) => Category.books)
     @JoinColumn({name: 'category_id'})
     category: Category
 
@@ -39,5 +36,5 @@ export class Book extends BaseEntity {
     coverImageDirectory: string
 
     @Column()
-    duration: Duration
+    duration: string
 }

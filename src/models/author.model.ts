@@ -20,7 +20,7 @@ export class Author extends BaseEntity {
     @Column({nullable: true})
     description: string
 
-    @OneToMany(type => Book, (Book) => Book.author)
+    @OneToMany(() => Book, (Book) => Book.author)
     @JoinColumn({name:'author_id'})
     books : Book[]
 }

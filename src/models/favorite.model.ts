@@ -16,12 +16,12 @@ export class Favorite extends BaseEntity {
     @PrimaryGeneratedColumn({name:'favorite_id'})
     favoriteId: number
 
-    @ManyToMany(type => Book)
+    @ManyToMany(() => Book)
     @JoinTable({
         name: 'favorite_book',
         joinColumn: {
-            name: 'book_id',
-            referencedColumnName: 'bookId'
+            name: 'favorite_id',
+            referencedColumnName: 'favoriteId'
         },
         inverseJoinColumn: {
             name: 'book_id',
@@ -30,7 +30,7 @@ export class Favorite extends BaseEntity {
     })
     books: Book[]
 
-    @ManyToOne(type => Account)
+    @ManyToOne(() => Account)
     @JoinColumn({name:'uid'})
     account: Account
 }

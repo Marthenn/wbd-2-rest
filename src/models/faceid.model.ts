@@ -1,10 +1,17 @@
 import {
     Entity,
-    Column
+    PrimaryColumn,
+    OneToOne,
+    JoinColumn
 } from "typeorm";
+import {Account} from "./account.model";
 
 @Entity()
 export class FaceID{
-    @Column({name:'facial_id'})
+    @PrimaryColumn({name:'facial_id'})
     facialId: string
+
+    @OneToOne(() => Account, {nullable: true})
+    @JoinColumn({name:'uid'})
+    account: Account
 }

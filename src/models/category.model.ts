@@ -17,7 +17,7 @@ export class Category extends BaseEntity {
     @Column()
     name: string
 
-    @OneToMany(type => Book, (Book) => Book.category)
+    @OneToMany(() => Book, (Book) => Book.category)
     @JoinColumn({name:'category_id'})
     books: Book[]
 }
