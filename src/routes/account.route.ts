@@ -14,6 +14,6 @@ export class AccountRoute {
 
     getRoute() {
         return Router()
-            .get('/account', this.accountController.getAll())
+            .post('/account/token', this.accountController.token())
     }
 }
