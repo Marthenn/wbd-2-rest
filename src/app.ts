@@ -3,7 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { DataSource } from "typeorm";
 
-import { serverConfig } from "./config/server-config";
+import { serverConfig } from "./config/server.config";
 import { dataConfig } from "./config/data.config";
 import { AccountRoute } from "./routes/account.route";
 import * as process from "process";
