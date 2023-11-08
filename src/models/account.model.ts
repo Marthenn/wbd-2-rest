@@ -13,7 +13,7 @@ import { Favorite } from './favorite.model'
 import { FaceID } from "./faceid.model";
 
 @Entity('account')
-export class Account {
+export class Account extends BaseEntity {
     @PrimaryGeneratedColumn({name:'uid'})
     uid: number
 
