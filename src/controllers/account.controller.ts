@@ -14,7 +14,7 @@ interface TokenRequest {
     password: string
 }
 
-export class UserController {
+export class AccountController {
     token() {
         return async (req: Request, res: Response) => {
             const { username, password }: TokenRequest = req.body;
