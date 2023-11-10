@@ -2,8 +2,9 @@ import {
     BaseEntity,
     Entity,
     Column,
-    PrimaryGeneratedColumn
+    PrimaryGeneratedColumn, ManyToOne, JoinColumn
 } from "typeorm";
+import {Book} from "./book.model";
 
 @Entity()
 export class Chapter extends BaseEntity { // no book_id since it's joined there (book is collection of chapters)
@@ -18,4 +19,8 @@ export class Chapter extends BaseEntity { // no book_id since it's joined there 
 
     @Column({name:'audio_directory'})
     audioDirectory: string
+
+    @ManyToOne(() => Book, book => book.chapters)
+    @JoinColumn({name:'book_id'})
+    book: Book
 }
