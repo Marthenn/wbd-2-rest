@@ -29,12 +29,11 @@ export class Account extends BaseEntity {
     @Column({name:'joined_date'})
     joinedDate: Date
 
+    @Column({name:'expired_date'})
+    expiredDate: Date
+
     @Column({name:'is_admin'})
     isAdmin: boolean
-
-    // @OneToOne(() => FaceID, {nullable: true})
-    // @JoinColumn({name:'uid'})
-    // faceId: FaceID
 
     @OneToMany(() => History, history => history.account)
     @JoinColumn({name:'uid'})
