@@ -4,11 +4,12 @@ import {
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
-    JoinColumn
+    JoinColumn, OneToMany
 } from "typeorm";
 
 import { Author } from './author.model'
 import { Category } from './category.model'
+import {Chapter} from "./chapter.model";
 
 @Entity()
 export class Book extends BaseEntity {
@@ -37,4 +38,8 @@ export class Book extends BaseEntity {
 
     @Column()
     duration: string
+
+    @OneToMany(() => Chapter, chapter => chapter.book)
+    @JoinColumn({name: 'book_id'})
+    chapters: Chapter[]
 }
