@@ -1,0 +1,50 @@
+version: '3.8'
+volumes:
+  db-rest:
+  redis-rest:
+
+services:
+  rest-api:
+    build: .
+    ports:
+      - 3001:3000
+    hostname: api-rest-webwbd-2
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    networks:
+      db-redis-api:
+
+  db:
+    image: postgres:16
+    restart: always
+    container_name: postgres-rest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_HOST=${DB_HOST}
+    hostname: db-rest-webwbd-2
+    volumes:
+      - db-rest:/var/lib/postgresql/data
+      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      db-redis-api:
+  
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - 50001:50000
+    hostname: redis-rest-webwbd-2
+    volumes:
+      - redis-rest:/data
+    networks:
+      db-redis-api:
+
+networks:
+  db-redis-api:
