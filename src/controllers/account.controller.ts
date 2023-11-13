@@ -73,11 +73,11 @@ export class AccountController {
                     .getOne()
                 if (!account) {
                     res.status(StatusCodes.OK).json({
-                        message: "Email not exist"
+                        message: true
                     })
                 } else {
                     res.status(StatusCodes.OK).json({
-                        message: "Email exist with uid: " + account.uid
+                        message: false
                     })
                 }
             } catch (error : any) {
