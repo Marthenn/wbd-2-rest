@@ -13,5 +13,5 @@ const generatePort = () => {
 export const soapConfig: { host: string, port: string, key: string } = {
     host: generateHost(),
     port: generatePort(),
-    key: "soap"
+    key: process.env.SOAP_KEY ? process.env.SOAP_KEY : "soap"
 }
