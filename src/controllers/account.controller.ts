@@ -80,7 +80,7 @@ export class AccountController {
                         message: false
                     })
                 }
-            } catch (error : any) {
+            } catch (error : Error) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                     message: error.message
                 })
