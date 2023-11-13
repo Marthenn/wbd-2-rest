@@ -29,7 +29,7 @@ export class Account extends BaseEntity {
     @Column({name:'joined_date'})
     joinedDate: Date
 
-    @Column({name:'expired_date'})
+    @Column({name:'expired_date', nullable: true})
     expiredDate: Date
 
     @Column({name:'is_admin'})

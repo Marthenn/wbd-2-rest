@@ -58,4 +58,33 @@ export class AccountController {
             })
         }
     }
+
+    usernameExist(){
+        // TODO: check if username exit
+    }
+
+    emailExist(){
+        return async (req: Request, res: Response) => {
+            try {
+                const email = req.params.email
+                const account = await Account.createQueryBuilder('account')
+                    .select(['account.uid', 'account.email'])
+                    .where('account.email = :email', { email })
+                    .getOne()
+                if (!account) {
+                    res.status(StatusCodes.OK).json({
+                        message: "Email not exist"
+                    })
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: "Email exist with uid: " + account.uid
+                    })
+                }
+            } catch (error : any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: error.message
+                })
+            }
+        }
+    }
 }

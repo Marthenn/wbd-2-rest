@@ -15,5 +15,6 @@ export class AccountRoute {
     getRoute() {
         return Router()
             .post('/account/token', this.accountController.token())
+            .get('/account/:email', this.accountController.emailExist())
     }
 }
