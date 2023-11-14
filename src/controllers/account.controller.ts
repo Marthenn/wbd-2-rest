@@ -8,6 +8,7 @@ import {
 } from "../middlewares/authentication.middlewares";
 import { jwtConfig } from "../config/jwt.config";
 import { Account } from "../models/account.model";
+import {bcryptConfig} from "../config/bcrypt.config";
 
 interface TokenRequest {
     username: string,
@@ -141,7 +142,7 @@ export class AccountController {
                 }
 
                 // hash the password
-                const salt = await bcrypt.genSalt(10);
+                const salt = await bcrypt.genSalt(bcryptConfig.SaltRounds);
                 const hashedPassword = await bcrypt.hash(password, salt);
 
                 // create the account
