@@ -1,9 +1,7 @@
 import { DataSourceOptions } from "typeorm";
 
 import {Account} from "../models/account.model";
-import {Author} from "../models/author.model";
 import {Book} from "../models/book.model";
-import {Category} from "../models/category.model";
 import {Chapter} from "../models/chapter.model";
 import {FaceID} from "../models/faceid.model";
 import {Favorite} from "../models/favorite.model";
@@ -42,9 +40,7 @@ export const dataConfig: DataSourceOptions = {
     database: generatePostgreDatabase(),
     entities: [
         Account,
-        Author,
         Book,
-        Category,
         Chapter,
         FaceID,
         Favorite,
