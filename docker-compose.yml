@@ -12,12 +12,12 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      - db-postgres-rest
       - redis
     networks:
       db-redis-api:
 
-  db:
+  db-postgres-rest:
     image: postgres:16
     restart: always
     container_name: postgres-rest
