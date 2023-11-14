@@ -60,7 +60,28 @@ export class AccountController {
     }
 
     usernameExist(){
-        // TODO: check if username exit
+        return async (req: Request, res: Response) => {
+            try {
+                const username = req.params.username
+                const account = await Account.createQueryBuilder('account')
+                    .select(['account.uid', 'account.username'])
+                    .where('account.username = :username', { username })
+                    .getOne()
+                if (!account) {
+                    res.status(StatusCodes.OK).json({
+                        message: true
+                    })
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: false
+                    })
+                }
+            } catch (error : any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: error.message
+                })
+            }
+        }
     }
 
     emailExist(){
@@ -80,7 +101,7 @@ export class AccountController {
                         message: false
                     })
                 }
-            } catch (error : Error) {
+            } catch (error : any) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                     message: error.message
                 })
