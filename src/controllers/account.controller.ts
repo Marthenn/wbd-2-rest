@@ -108,4 +108,62 @@ export class AccountController {
             }
         }
     }
+
+    createAccount(){
+        return async (req: Request, res: Response) => {
+            try {
+                // parse the request body
+                const username = req.body.username
+                const email = req.body.email
+                const password = req.body.password
+
+                // check if the username and email already exist
+                const usernameExist = await Account.createQueryBuilder('account')
+                    .select(['account.uid', 'account.username'])
+                    .where('account.username = :username', { username })
+                    .getOne()
+                if (usernameExist) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: "Username already exist"
+                    })
+                    return
+                }
+
+                const emailExist = await Account.createQueryBuilder('account')
+                    .select(['account.uid', 'account.email'])
+                    .where('account.email = :email', { email })
+                    .getOne()
+                if (emailExist) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: "Email already exist"
+                    })
+                    return
+                }
+
+                // hash the password
+                const salt = await bcrypt.genSalt(10);
+                const hashedPassword = await bcrypt.hash(password, salt);
+
+                // create the account
+                const account = new Account();
+                account.username = username
+                account.email = email
+                account.password = hashedPassword
+                account.isAdmin = false
+                account.joinedDate = new Date()
+
+                // save the account
+                await account.save()
+
+                // return the account
+                res.status(StatusCodes.OK).json({
+                    message: "Account created successfully",
+                })
+            } catch (error : any){
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: error.message
+                })
+            }
+        }
+    }
 }
