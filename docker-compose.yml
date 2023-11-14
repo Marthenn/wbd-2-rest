@@ -7,7 +7,7 @@ services:
   rest-api:
     build: .
     ports:
-      - 3001:3000
+      - 3000:3000
     hostname: api-rest-webwbd-2
     env_file:
       - .env
@@ -22,7 +22,7 @@ services:
     restart: always
     container_name: postgres-rest
     ports:
-      - 5432:5432
+      - 50005:50005
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -33,6 +33,7 @@ services:
       - ./dbinit/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       db-redis-api:
+    command: -p 50005
   
   redis:
     image: redis:latest
