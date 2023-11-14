@@ -7,9 +7,6 @@ import {Account} from "../models/account.model";
 export class SoapService {
     async createRequest(username: string, email: string, directory: string) {
         try {
-            // upload file to server
-            const uploadMiddleware = new UploadMiddleware();
-
             // create request
             const response = await axios.post<string>(
                 `http://${soapConfig.host}:${soapConfig.port}/api/Service`,
@@ -146,6 +143,52 @@ export class SoapService {
             const xml = await xml2js.parseStringPromise(response.data);
             // TODO: handle response from soap
 
+        } catch (error) {
+            // TODO: handle error
+        }
+    }
+
+    async approveRequest(username: string){
+        try {
+            // create request
+            const response = await axios.post<string>(
+                `http://${soapConfig.host}:${soapConfig.port}/api/Service`,
+                `<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+                        <Body>
+                            <ApproveRequest xmlns="http://service.webwbd/">
+                                <username xmlns="">${username}</username>
+                                <api_key xmlns="">${soapConfig.key}</api_key>
+                            </ApproveRequest>
+                        </Body>
+                    </Envelope>`
+            )
+
+            const xml = await xml2js.parseStringPromise(response.data);
+
+            // TODO: handle response from soap
+        } catch (error) {
+            // TODO: handle error
+        }
+    }
+
+    async rejectRequest(username: string){
+        try {
+            // create request
+            const response = await axios.post<string>(
+                `http://${soapConfig.host}:${soapConfig.port}/api/Service`,
+                `<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+                        <Body>
+                            <ApproveRequest xmlns="http://service.webwbd/">
+                                <username xmlns="">Hanif</username>
+                                <api_key xmlns="">15b4666c-f135-426c-8243-f030fdecaa7c</api_key>
+                            </ApproveRequest>
+                        </Body>
+                    </Envelope>`
+            )
+
+            const xml = await xml2js.parseStringPromise(response.data);
+
+            // TODO: handle response from soap
         } catch (error) {
             // TODO: handle error
         }
