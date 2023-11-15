@@ -8,7 +8,7 @@ export class BookController {
             console.log("Handling /book request"); // Add this line for debugging
             try {
                 const books = await Book.createQueryBuilder('book')
-                    .select(['book.id', 'book.title', 'book.rating', 'book.duration'])
+                    .select(['book.book_id', 'book.title', 'book.rating', 'book.duration'])
                     .take(5)
                     .getMany();
                 res.status(StatusCodes.OK).json({
