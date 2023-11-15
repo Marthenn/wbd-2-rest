@@ -3,7 +3,6 @@ import { DataSourceOptions } from "typeorm";
 import {Account} from "../models/account.model";
 import {Book} from "../models/book.model";
 import {Chapter} from "../models/chapter.model";
-import {FaceID} from "../models/faceid.model";
 import {Favorite} from "../models/favorite.model";
 import {History} from "../models/history.model";
 import {AccountSubscriber} from "../subscribers/account.subscriber";
@@ -42,7 +41,6 @@ export const dataConfig: DataSourceOptions = {
         Account,
         Book,
         Chapter,
-        FaceID,
         Favorite,
         History
     ],
