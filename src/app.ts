@@ -6,17 +6,20 @@ import { DataSource } from "typeorm";
 import { serverConfig } from "./config/server.config";
 import { dataConfig } from "./config/data.config";
 import { AccountRoute } from "./routes/account.route";
-import * as process from "process";
+import {CronMiddleware} from "./middlewares/cron.middleware";
+import {schedule} from "node-cron";
 
 export class App {
     dataSource: DataSource;
     server: Express;
+    cronMiddleware: CronMiddleware
 
     constructor() {
         // TODO: add routes
         const accountRoute = new AccountRoute();
 
         this.dataSource = new DataSource(dataConfig);
+        this.cronMiddleware = new CronMiddleware();
 
         this.server = express();
         this.server.use((cors as (options: cors.CorsOptions) => express.RequestHandler)({}));
@@ -28,6 +31,8 @@ export class App {
             accountRoute.getRoute()
             // TODO: add routes
         )
+
+        schedule('* * * * * *', async () => this.cronMiddleware.synchronizeBook());
     }
 
     run() {
