@@ -5,6 +5,7 @@ import {Book} from "../models/book.model";
 import {Chapter} from "../models/chapter.model";
 import {Favorite} from "../models/favorite.model";
 import {History} from "../models/history.model";
+import {Rating} from "../models/rating.model";
 import {AccountSubscriber} from "../subscribers/account.subscriber";
 import * as dotenv from 'dotenv';
 
@@ -42,7 +43,8 @@ export const dataConfig: DataSourceOptions = {
         Book,
         Chapter,
         Favorite,
-        History
+        History,
+        Rating
     ],
     synchronize: true,
     logging: true,

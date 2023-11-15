@@ -20,9 +20,6 @@ export class Book extends BaseEntity {
     @Column()
     description: string
 
-    @Column({nullable: true})
-    rating: number
-
     @Column({name: 'author'})
     author: String
 
