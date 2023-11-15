@@ -6,7 +6,7 @@ import { DataSource } from "typeorm";
 import { serverConfig } from "./config/server.config";
 import { dataConfig } from "./config/data.config";
 import { AccountRoute } from "./routes/account.route";
-import * as process from "process";
+import {BookRoute} from "./routes/book.route";
 
 export class App {
     dataSource: DataSource;
@@ -15,6 +15,7 @@ export class App {
     constructor() {
         // TODO: add routes
         const accountRoute = new AccountRoute();
+        const bookRoute = new BookRoute();
 
         this.dataSource = new DataSource(dataConfig);
 
@@ -25,7 +26,8 @@ export class App {
             express.json(),
             express.urlencoded({extended: true}),
             morgan("combined"),
-            accountRoute.getRoute()
+            accountRoute.getRoute(),
+            bookRoute.getRoute()
             // TODO: add routes
         )
     }
