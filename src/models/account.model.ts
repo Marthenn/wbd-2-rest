@@ -10,7 +10,6 @@ import {
 
 import { History } from './history.model'
 import { Favorite } from './favorite.model'
-import { FaceID } from "./faceid.model";
 
 @Entity('account')
 export class Account extends BaseEntity {
