@@ -13,7 +13,6 @@ CREATE TABLE book (
     title character varying NOT NULL,
     description character varying NOT NULL,
     cover_image_directory character varying,
-    audio_preview_directory character varying NOT NULL,
     duration_preview character varying NOT NULL,
     author character varying NOT NULL,
     category character varying NOT NULL

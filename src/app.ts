@@ -11,7 +11,6 @@ import {BookRoute} from "./routes/book.route";
 export class App {
     dataSource: DataSource;
     server: Express;
-
     constructor() {
         // TODO: add routes
         const accountRoute = new AccountRoute();

@@ -23,9 +23,6 @@ export class Book extends BaseEntity {
     @Column({name: 'cover_image_directory', nullable: true})
     coverImageDirectory: string
     
-    @Column({name: 'audio_preview_directory'})
-    audioPreviewDirectory: string
-    
     @Column()
     duration: string
     
