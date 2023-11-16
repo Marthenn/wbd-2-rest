@@ -13,7 +13,7 @@ CREATE TABLE book (
     title character varying NOT NULL,
     description character varying NOT NULL,
     cover_image_directory character varying,
-    duration_preview character varying NOT NULL,
+    duration character varying NOT NULL,
     author character varying NOT NULL,
     category character varying NOT NULL
 );
@@ -23,7 +23,6 @@ CREATE TABLE chapter (
     chapter_name character varying NOT NULL,
     transcript_directory character varying,
     audio_directory character varying NOT NULL,
-    duration character varying NOT NULL,
     book_id integer,
     FOREIGN KEY (book_id) REFERENCES book(book_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -66,13 +65,12 @@ VALUES
     (false, 'user1', 'user1_password', 'user1@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '365 days'),
     (false, 'user2', 'user2_password', 'user2@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '365 days');
 
-INSERT INTO book (title, description, cover_image_directory, audio_preview_directory, duration_preview, author, category)
+INSERT INTO book (title, description, cover_image_directory, duration, author, category)
 SELECT
     'Book ' || generate_series,
     'Description for Book ' || generate_series,
     '/covers/book' || generate_series || '.jpg',
-    '/audio/bookpreview' || generate_series || '.mp3',
-    '00:30:00',
+    (LPAD(floor(random() * 2)::text, 2, '0') || ':' || LPAD(floor(random() * 60)::text, 2, '0') || ':' || LPAD(floor(random() * 60)::text, 2, '0'))::time,  -- Random duration
     'Author ' || (generate_series % 10 + 1),
     CASE
         WHEN generate_series % 3 = 0 THEN 'Fiction'
@@ -81,12 +79,11 @@ SELECT
     END
 FROM generate_series(1, 20);
 
-INSERT INTO chapter (chapter_name, transcript_directory, audio_directory, duration, book_id)
+INSERT INTO chapter (chapter_name, transcript_directory, audio_directory, book_id)
 SELECT
     'Chapter ' || (generate_series % 5) + 1 || ': Hello World!',
     '/transcripts/chapter' || generate_series || '.txt',
     '/audio/chapter' || generate_series || '.mp3',
-    (LPAD(floor(random() * 2)::text, 2, '0') || ':' || LPAD(floor(random() * 60)::text, 2, '0') || ':' || LPAD(floor(random() * 60)::text, 2, '0'))::time,  -- Random duration
     floor(generate_series / 5) + 1
 FROM generate_series(0, 99);
 
