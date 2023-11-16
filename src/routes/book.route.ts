@@ -47,5 +47,17 @@ export class BookRoute {
                 console.log("Handling /book request");
                 this.bookController.index()(req, res);
             })
+            .get('/favoritebook/:uid/:filter/:page', (req, res) => {
+                console.log("Handling /favoritebook/:uid/:filter/:page request");
+                this.bookController.index()(req, res);
+            })
+            .get('/favoritebook/:uid/:filter', (req, res) => {
+                console.log("Handling /favoritebook/:uid/:filter request");
+                this.bookController.index()(req, res);
+            })
+            .get('/favoritebook/:uid', (req, res) => {
+                console.log("Handling /favoritebook/:uid request");
+                this.bookController.index()(req, res);
+            })
     }
 }

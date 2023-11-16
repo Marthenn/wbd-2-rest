@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { Book } from '../models/book.model';
 import { Rating } from '../models/rating.model';
 import { Chapter } from '../models/chapter.model';
+import { Favorite } from '../models/favorite.model';
 
 export class BookController {
     index() {
@@ -137,7 +138,8 @@ export class BookController {
             
             try {
                 const chapterDetails = await Chapter.createQueryBuilder('chapter')
-                .select('chapter.chapter_name', 'chapter_name')
+                .select('chapter.chapter_id', 'chapter_id')
+                .addSelect('chapter.chapter_name', 'chapter_name')
                 .addSelect('chapter.transcript_directory', 'transcript_directory')
                 .addSelect('chapter.audio_directory', 'audio_directory')
                 .addSelect('book.title', 'title')
@@ -157,6 +159,55 @@ export class BookController {
                 });
             }
         };    
+    }
+
+    favoriteBookList() {
+        return async (req: Request, res: Response) => {
+            
+            // Check page parameter availability
+            let page;
+            if (parseInt(req.params.page)) {
+                page = parseInt(req.params.page);
+            } else {
+                page = 1;
+            }
+
+            // Check filter parameter availability
+            let filterBook = "";
+            if (req.params.filter) {
+                filterBook = req.params.filter;
+            }
+            
+            const itemsPerPage = 8;
+            
+            try {
+                const favoriteBooks = await Book.createQueryBuilder('book')
+                    .distinctOn(['book.book_id'])
+                    .addSelect('book.title', 'title')
+                    .addSelect('book.duration', 'duration')
+                    .addSelect('AVG(rating.rating)', 'average_rating')
+                    .addSelect('book.cover_image_directory', 'cover_image_directory')
+                    .addSelect('book.author', 'author')
+                    // .addSelect(['favorite.favorite_id', 'favorite.uid', 'favorite_book.favorite_id', 'favorite_book.book_id'])
+                    .innerJoin('favorite_book', 'favorite_book', 'favorite_book.book_id = book.book_id')
+                    .innerJoin('favorite', 'favorite', 'favorite.favorite_id = favorite_book.favorite_id')
+                    .where('favorite.uid = :uid', { uid: parseInt(req.params.uid) })
+                    .andWhere('book.title ILIKE :filter', { filter: `%${filterBook}%` })
+                    .offset((page - 1) * itemsPerPage) // Skip items
+                    .limit(itemsPerPage)  // Limit items
+                    .getRawMany();
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                    favoriteBooks,
+                });
+                console.log(favoriteBooks);
+            } catch (error) {
+                console.error(error);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        };
     }
 }
 
