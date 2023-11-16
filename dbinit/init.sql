@@ -12,7 +12,6 @@ CREATE TABLE book (
     book_id SERIAL PRIMARY KEY,
     title character varying NOT NULL,
     description character varying NOT NULL,
-    rating float, -- Rating between 0 and 5
     cover_image_directory character varying,
     duration character varying NOT NULL,
     author character varying NOT NULL,
@@ -51,17 +50,25 @@ CREATE TABLE history (
     FOREIGN KEY (chapter_id) REFERENCES chapter(chapter_id)
 );
 
+CREATE TABLE rating (
+    rating_id SERIAL PRIMARY KEY,
+    book_id integer,
+    uid integer,
+    rating real NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES book(book_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (uid) REFERENCES account(uid) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 INSERT INTO account (is_admin, username, password, email, joined_date, expired_date)
 VALUES
     (true, 'admin_user', 'admin_password123', 'admin@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '365 days'),
     (false, 'user1', 'user1_password', 'user1@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '365 days'),
     (false, 'user2', 'user2_password', 'user2@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '365 days');
 
-INSERT INTO book (title, description, rating, cover_image_directory, duration, author, category)
+INSERT INTO book (title, description, cover_image_directory, duration, author, category)
 SELECT
     'Book ' || generate_series,
     'Description for Book ' || generate_series,
-    (random() * (5.0 - 0.0) + 0.0)::numeric(3,1), -- Random rating between 0.0 and 5.0 with one decimal place
     '/covers/book' || generate_series || '.jpg',
     '00:30:00', -- Varying duration between 5 and 24 hours
     'Author ' || (generate_series % 10 + 1),
@@ -98,3 +105,10 @@ SELECT
     floor(random() * 100) + 1 as chapter_id,
     '00:30:00' as curr_duration
 FROM generate_series(1, 20);
+
+INSERT INTO rating (book_id, uid, rating)
+SELECT
+    floor(random() * 20) + 1 as book_id,
+    floor(random() * 3) + 1 as uid,
+    (random() * 5)::numeric(3,1) as rating
+FROM generate_series(1, 100);
