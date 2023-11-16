@@ -8,28 +8,15 @@ CREATE TABLE account (
     expired_date timestamp without time zone NOT NULL
 );
 
-CREATE TABLE author (
-    author_id SERIAL PRIMARY KEY,
-    name character varying NOT NULL,
-    description character varying
-);
-
-CREATE TABLE category (
-    category_id SERIAL PRIMARY KEY,
-    name character varying NOT NULL UNIQUE
-);
-
 CREATE TABLE book (
     book_id SERIAL PRIMARY KEY,
-    author_id integer,
-    category_id integer,
     title character varying NOT NULL,
     description character varying NOT NULL,
     rating integer,
     cover_image_directory character varying,
     duration character varying NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES category(category_id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (author_id) REFERENCES author(author_id) ON UPDATE CASCADE ON DELETE CASCADE
+    author character varying NOT NULL,
+    category character varying NOT NULL
 );
 
 CREATE TABLE chapter (
@@ -39,12 +26,6 @@ CREATE TABLE chapter (
     audio_directory character varying NOT NULL,
     book_id integer,
     FOREIGN KEY (book_id) REFERENCES book(book_id) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE TABLE face_id (
-    facial_id character varying PRIMARY KEY,
-    uid integer UNIQUE,
-    FOREIGN KEY (uid) REFERENCES account(uid)
 );
 
 CREATE TABLE favorite (
