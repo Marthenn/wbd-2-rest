@@ -21,7 +21,7 @@ CREATE TABLE book (
 CREATE TABLE chapter (
     chapter_id SERIAL PRIMARY KEY,
     chapter_name character varying NOT NULL,
-    transcript_directory character varying,
+    transcript text,
     audio_directory character varying NOT NULL,
     book_id integer,
     FOREIGN KEY (book_id) REFERENCES book(book_id) ON UPDATE CASCADE ON DELETE CASCADE

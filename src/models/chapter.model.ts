@@ -14,8 +14,8 @@ export class Chapter extends BaseEntity { // no book_id since it's joined there 
     @Column({name:'chapter_name'})
     chapter: string
 
-    @Column({name:'transcript_directory', nullable: true})
-    transcriptDirectory: string
+    @Column({name:'transcript', nullable: true})
+    transcript: string
 
     @Column({name:'audio_directory'})
     audioDirectory: string
