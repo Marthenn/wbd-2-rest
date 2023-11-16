@@ -56,9 +56,16 @@ export class BookController {
     bookCount() {
         return async (req: Request, res: Response) => {
             try {
-                const bookCount = await Book.createQueryBuilder('book')
+                // Check filter parameter availability
+                let filterBook = "";
+                if (req.params.filter) {
+                    filterBook = req.params.filter;
+                }
+                const bookCountRaw = await Book.createQueryBuilder('book')
                     .select('COUNT(*)', 'bookCount')
+                    .where('book.title ILIKE :filter', { filter: `%${filterBook}%` })
                     .getRawOne();
+                const bookCount = parseInt(bookCountRaw.bookCount);
                 res.status(StatusCodes.OK).json({
                     message: ReasonPhrases.OK,
                     bookCount,
@@ -183,16 +190,20 @@ export class BookController {
             try {
                 const favoriteBooks = await Book.createQueryBuilder('book')
                     .distinctOn(['book.book_id'])
-                    .addSelect('book.title', 'title')
-                    .addSelect('book.duration', 'duration')
-                    .addSelect('AVG(rating.rating)', 'average_rating')
-                    .addSelect('book.cover_image_directory', 'cover_image_directory')
-                    .addSelect('book.author', 'author')
-                    // .addSelect(['favorite.favorite_id', 'favorite.uid', 'favorite_book.favorite_id', 'favorite_book.book_id'])
+                    .select([
+                        'book.book_id as book_id',
+                        'book.title as title',
+                        'book.duration as duration',
+                        'book.cover_image_directory as cover_image_directory',
+                        'book.author as author',
+                        'AVG(rating.rating) as averageRating', 
+                    ])
                     .innerJoin('favorite_book', 'favorite_book', 'favorite_book.book_id = book.book_id')
                     .innerJoin('favorite', 'favorite', 'favorite.favorite_id = favorite_book.favorite_id')
+                    .leftJoin('rating', 'rating', 'rating.book_id = book.book_id') 
                     .where('favorite.uid = :uid', { uid: parseInt(req.params.uid) })
                     .andWhere('book.title ILIKE :filter', { filter: `%${filterBook}%` })
+                    .groupBy('book.book_id')
                     .offset((page - 1) * itemsPerPage) // Skip items
                     .limit(itemsPerPage)  // Limit items
                     .getRawMany();
@@ -209,5 +220,39 @@ export class BookController {
             }
         };
     }
+
+    favoriteBookCount() {
+        return async (req: Request, res: Response) => {
+            try {
+                // Check filter parameter availability
+                let filterBook = "";
+                if (req.params.filter) {
+                    filterBook = req.params.filter;
+                }
+                const favoriteBooks = await Book.createQueryBuilder('book')
+                    .distinctOn(['book.book_id'])
+                    .select('book.book_id as book_id')
+                    .innerJoin('favorite_book', 'favorite_book', 'favorite_book.book_id = book.book_id')
+                    .innerJoin('favorite', 'favorite', 'favorite.favorite_id = favorite_book.favorite_id')
+                    .where('favorite.uid = :uid', { uid: parseInt(req.params.uid) })
+                    .andWhere('book.title ILIKE :filter', { filter: `%${filterBook}%` })
+                    .groupBy('book.book_id')
+                    .getRawMany();
+                const favoriteBookCount = favoriteBooks.length;
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                    favoriteBookCount,
+                });
+                console.log(favoriteBookCount);
+            } catch (error: any) {
+                console.error(error);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    // message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                    message: error.message,
+                });
+            }
+        };
+    }
+
 }
 

@@ -15,49 +15,30 @@ export class BookRoute {
     getRoute() {
         console.log("Setting up /book route");
         return Router()
-            .get('/book/details/:book_id/chapter/:chapter_id', (req, res) => {
+            .get('/book/details/:book_id/chapter/:chapter_id?', (req, res) => {
                 console.log("Handling /book/details/:book_id/chapter/:chapter_id request");
                 this.bookController.chapterDetails()(req, res);
             })
-            .get('/book/details/:book_id/chapternames', (req, res) => {
-                console.log("Handling /book/details/:book_id/chapternames request");
-                this.bookController.chapterNames()(req, res);
-            })
-            .get('/book/details/:book_id', (req, res) => {
+            .get('/book/details/:book_id?', (req, res) => {
                 console.log("Handling /book/details/:book_id request");
                 this.bookController.bookDetails()(req, res);
             })
-            .get('/book/details', (req, res) => {
-                console.log("Handling /book/details request");
-                this.bookController.bookDetails()(req, res);
-            })
-            .get('/book/count', (req, res) => {
-                console.log("Handling /book/count request");
+            .get('/book/count/:filter?', (req, res) => {
+                console.log("Handling /book/count/filter? request");
                 this.bookController.bookCount()(req, res);
             })
-            .get('/book/:filter/:page', (req, res) => {
+            .get('/book/:page?/:filter?', (req, res) => {
                 console.log("Handling /book/:filter/:page request");
                 this.bookController.index()(req, res);
             })
-            .get('/book/:filter', (req, res) => {
-                console.log("Handling /book/:filter request");
-                this.bookController.index()(req, res);
+            .get('/favoritebook/count/:uid/:filter?', (req, res) => {
+                console.log("Handling /favoritebook/count/:uid/:filter? request");
+                console.log(req.params);
+                this.bookController.favoriteBookCount()(req, res);
             })
-            .get('/book', (req, res) => {
-                console.log("Handling /book request");
-                this.bookController.index()(req, res);
-            })
-            .get('/favoritebook/:uid/:filter/:page', (req, res) => {
+            .get('/favoritebook/:uid/:page?/:filter?', (req, res) => {
                 console.log("Handling /favoritebook/:uid/:filter/:page request");
-                this.bookController.index()(req, res);
-            })
-            .get('/favoritebook/:uid/:filter', (req, res) => {
-                console.log("Handling /favoritebook/:uid/:filter request");
-                this.bookController.index()(req, res);
-            })
-            .get('/favoritebook/:uid', (req, res) => {
-                console.log("Handling /favoritebook/:uid request");
-                this.bookController.index()(req, res);
+                this.bookController.favoriteBookList()(req, res);
             })
     }
 }
