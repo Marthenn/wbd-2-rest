@@ -25,6 +25,28 @@ export class BookController {
         };
     }
 
-    
+    bookDetails() {
+        return async (req: Request, res: Response) => {
+            console.log("Handling /book/:id request");
+            try {
+                const book = await Book.createQueryBuilder('book')
+                    .select(['book.book_id', 'book.title', 'book.rating', 'book.duration', 'book.description', 'book.cover_image_directory'])
+                    .where('book.book_id = :id', { 
+                        id: parseInt(req.params.id) 
+                    })
+                    .getOne();
+                res.status(StatusCodes.OK).json({
+                    message: false,
+                    book,
+                });
+                console.log(book);
+            } catch (error) {
+                console.error(error);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        };
+    }
 }
 
