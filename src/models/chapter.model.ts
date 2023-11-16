@@ -11,7 +11,7 @@ export class Chapter extends BaseEntity { // no book_id since it's joined there 
     @PrimaryGeneratedColumn({name:'chapter_id'})
     chapterId: number
 
-    @Column({name:'chapter'})
+    @Column({name:'chapter_name'})
     chapter: string
 
     @Column({name:'transcript_directory', nullable: true})
@@ -19,6 +19,9 @@ export class Chapter extends BaseEntity { // no book_id since it's joined there 
 
     @Column({name:'audio_directory'})
     audioDirectory: string
+
+    @Column({name:'duration'})
+    duration: string
 
     @ManyToOne(() => Book, book => book.chapters)
     @JoinColumn({name:'book_id'})
