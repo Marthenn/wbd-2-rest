@@ -276,9 +276,9 @@ export class BookController {
                 const newFavorite = new Favorite();
                 newFavorite.account = account;
                 newFavorite.books = books;
-                const newFavoriteStatus = await newFavorite.save();
+                const newFavoriteId = await newFavorite.save();
 
-                if (!newFavoriteStatus) {
+                if (!newFavoriteId) {
                     res.status(StatusCodes.BAD_REQUEST).json({
                         message: ReasonPhrases.BAD_REQUEST,
                     });
@@ -306,8 +306,8 @@ export class BookController {
                     .getOne();
                 const favoriteBookId = favoriteBookIdRaw.favoriteId;
                 const favorite = await Favorite.findOneBy({ favoriteId: favoriteBookId });
-                const deleteFavoriteBookStatus = await favorite.remove();
-                if (!deleteFavoriteBookStatus) {
+                const deleteFavoriteBookId = await favorite.remove();
+                if (!deleteFavoriteBookId) {
                     res.status(StatusCodes.BAD_REQUEST).json({
                         message: ReasonPhrases.BAD_REQUEST,
                     });
@@ -318,6 +318,86 @@ export class BookController {
                     message: ReasonPhrases.OK,
                 });
 
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        }
+    }
+
+    // Check if rating is null or not, for differentiating between addRating (POST) and updateRating (PUT)
+    ratingStatus() {
+        return async (req: Request, res: Response) => {
+            try {
+                const rating = await Rating.createQueryBuilder('rating')
+                    .select('rating.*')
+                    .where('rating.book_id = :book_id', { book_id: parseInt(req.params.book_id) })
+                    .andWhere('rating.uid = :uid', { uid: parseInt(req.params.uid) })
+                    .getRawMany();
+                console.log(rating);
+                if (rating.length === 0) {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                        ratingStatus: false,
+                    });
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                        ratingStatus: true,
+                    });
+                }
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        }
+    }
+
+    addRating() {
+        return async (req: Request, res: Response) => {
+            try {
+                const rating = new Rating();
+                rating.rating = parseFloat(req.body.rating);
+                rating.book = await Book.findOneBy({ bookId: parseInt(req.params.book_id) });
+                rating.account = await Account.findOneBy({ uid: parseInt(req.params.uid) });
+                const ratingId = await rating.save();
+                if (!ratingId) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: ReasonPhrases.BAD_REQUEST,
+                    });
+                    return;
+                }
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                });
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        }
+    }
+
+    updateRating() {
+        return async (req: Request, res: Response) => {
+            try {
+                const rating = await Rating.createQueryBuilder('rating')
+                    .where('rating.book_id = :book_id', { book_id: parseInt(req.params.book_id) })
+                    .andWhere('rating.uid = :uid', { uid: parseInt(req.params.uid) })
+                    .getOne();
+                rating.rating = parseFloat(req.body.rating);
+                const ratingId = await rating.save();
+                if (!ratingId) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: ReasonPhrases.BAD_REQUEST,
+                    });
+                    return;
+                }
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                });
             } catch (error: any) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                     message: ReasonPhrases.INTERNAL_SERVER_ERROR,

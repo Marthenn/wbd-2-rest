@@ -27,6 +27,10 @@ export class BookRoute {
                 console.log("Handling /book/details/:book_id GET request");
                 this.bookController.bookDetails()(req, res);
             })
+            .get('/book/rating/:uid/:book_id', (req, res) => {
+                console.log("Handling /book/rating/:uid/:book_id GET request");
+                this.bookController.ratingStatus()(req, res);
+            })
             .get('/book/count/:filter?', (req, res) => {
                 console.log("Handling /book/count/filter? GET request");
                 this.bookController.bookCount()(req, res);
@@ -51,6 +55,14 @@ export class BookRoute {
             .get('/favoritebook/:uid/:page?/:filter?', (req, res) => {
                 console.log("Handling /favoritebook/:uid/:filter/:page GET request");
                 this.bookController.favoriteBookList()(req, res);
+            })
+            .post('/book/rating/:uid/:book_id', (req, res) => {
+                console.log("Handling /book/rating/:uid/:book_id POST request");
+                this.bookController.addRating()(req, res);
+            })
+            .put('/book/rating/:uid/:book_id', (req, res) => {
+                console.log("Handling /book/rating/:uid/:book_id PUT request");
+                this.bookController.updateRating()(req, res);
             })
     }
 }
