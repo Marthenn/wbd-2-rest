@@ -64,5 +64,17 @@ export class BookRoute {
                 console.log("Handling /book/rating/:uid/:book_id PUT request");
                 this.bookController.updateRating()(req, res);
             }) // update rating
+            .post('/book/details/:book_id/chapter', (req, res) => {
+                console.log("Handling /book/details/:book_id/chapter POST request");
+                this.bookController.addChapter()(req, res);
+            }) // add chapter
+            .put('/book/details/:book_id/chapter/:chapter_id', (req, res) => {
+                console.log("Handling /book/details/:book_id/chapter/:chapter_id PUT request");
+                this.bookController.updateChapter()(req, res);
+            }) // update chapter
+            .delete('/book/details/:book_id/chapter/:chapter_id', (req, res) => {
+                console.log("Handling /book/details/:book_id/chapter/:chapter_id DELETE request");
+                this.bookController.deleteChapter()(req, res);
+            }) // delete chapter
     }
 }

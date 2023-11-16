@@ -79,7 +79,7 @@ SELECT
     END
 FROM generate_series(1, 20);
 
-INSERT INTO chapter (chapter_name, transcript_directory, audio_directory, book_id)
+INSERT INTO chapter (chapter_name, transcript, audio_directory, book_id)
 SELECT
     'Chapter ' || (generate_series % 5) + 1 || ': Hello World!',
     '/transcripts/chapter' || generate_series || '.txt',

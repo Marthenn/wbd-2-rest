@@ -12,7 +12,7 @@ export class Chapter extends BaseEntity { // no book_id since it's joined there 
     chapterId: number
 
     @Column({name:'chapter_name'})
-    chapter: string
+    chapterName: string
 
     @Column({name:'transcript', nullable: true})
     transcript: string

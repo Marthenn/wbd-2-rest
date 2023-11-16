@@ -367,11 +367,11 @@ export class BookController {
                     res.status(StatusCodes.BAD_REQUEST).json({
                         message: ReasonPhrases.BAD_REQUEST,
                     });
-                    return;
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                    });
                 }
-                res.status(StatusCodes.OK).json({
-                    message: ReasonPhrases.OK,
-                });
             } catch (error: any) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                     message: ReasonPhrases.INTERNAL_SERVER_ERROR,
@@ -393,11 +393,89 @@ export class BookController {
                     res.status(StatusCodes.BAD_REQUEST).json({
                         message: ReasonPhrases.BAD_REQUEST,
                     });
-                    return;
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                    });
                 }
-                res.status(StatusCodes.OK).json({
-                    message: ReasonPhrases.OK,
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
                 });
+            }
+        }
+    }
+
+    addChapter() {
+        return async (req: Request, res: Response) => {
+            try {
+                const chapter = new Chapter();
+                chapter.chapterName = req.body.chapterName;
+                chapter.transcript = req.body.transcript;
+                chapter.audioDirectory = req.body.audioDirectory;
+                chapter.book = await Book.findOneBy({ bookId: parseInt(req.params.book_id) });
+                const chapterId = await chapter.save();
+                if (!chapterId) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: ReasonPhrases.BAD_REQUEST,
+                    });
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                    });
+                }
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        }
+    }
+
+    updateChapter() {
+        return async (req: Request, res: Response) => {
+            try {
+                const chapter = await Chapter.createQueryBuilder('chapter')
+                    .where('chapter.chapter_id = :chapter_id', { chapter_id: parseInt(req.params.chapter_id) })
+                    .getOne(); // Use get chapterNames to get chapter_id
+                chapter.chapterName = req.body.chapterName;
+                chapter.transcript = req.body.transcript;
+                chapter.audioDirectory = req.body.audioDirectory;
+                chapter.book = await Book.findOneBy({ bookId: parseInt(req.params.book_id) });
+                const chapterId = await chapter.save();
+                if (!chapterId) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: ReasonPhrases.BAD_REQUEST,
+                    });
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                    });
+                }
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        }
+    }
+
+    deleteChapter() {
+        return async (req: Request, res: Response) => {
+            try {
+                const chapter = await Chapter.createQueryBuilder('chapter')
+                    .where('chapter.chapter_id = :chapter_id', { chapter_id: parseInt(req.params.chapter_id) })
+                    .getOne(); // Use get chapterNames to get chapter_id
+                const deleteChapterId = await chapter.remove();
+                if (!deleteChapterId) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: ReasonPhrases.BAD_REQUEST,
+                    });
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                    });
+                }
             } catch (error: any) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                     message: ReasonPhrases.INTERNAL_SERVER_ERROR,
