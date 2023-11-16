@@ -7,11 +7,19 @@ import { Chapter } from '../models/chapter.model';
 export class BookController {
     index() {
         return async (req: Request, res: Response) => {
+            
+            // Check page parameter availability
             let page;
             if (parseInt(req.params.page)) {
                 page = parseInt(req.params.page);
             } else {
                 page = 1;
+            }
+
+            // Check filter parameter availability
+            let filterBook = "";
+            if (req.params.filter) {
+                filterBook = req.params.filter;
             }
             
             const itemsPerPage = 8;
@@ -25,9 +33,10 @@ export class BookController {
                     .addSelect('book.cover_image_directory', 'cover_image_directory')
                     .addSelect('book.author', 'author')
                     .innerJoin(Book, 'book', 'book.book_id = rating.book_id')
+                    .where('book.title ILIKE :filter', { filter: `%${filterBook}%` })
                     .groupBy('book.book_id, book.title, book.duration')
-                    .offset((page - 1) * itemsPerPage)  // Calculate the offset based on the page number
-                    .limit(itemsPerPage)  // Set the limit to the number of items per page
+                    .offset((page - 1) * itemsPerPage) // Skip items
+                    .limit(itemsPerPage)  // Limit items
                     .getRawMany();
                 res.status(StatusCodes.OK).json({
                     message: ReasonPhrases.OK,

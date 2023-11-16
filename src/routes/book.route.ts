@@ -35,8 +35,12 @@ export class BookRoute {
                 console.log("Handling /book/count request");
                 this.bookController.bookCount()(req, res);
             })
-            .get('/book/:page', (req, res) => {
-                console.log("Handling /book/:page request");
+            .get('/book/:filter/:page', (req, res) => {
+                console.log("Handling /book/:filter/:page request");
+                this.bookController.index()(req, res);
+            })
+            .get('/book/:filter', (req, res) => {
+                console.log("Handling /book/:filter request");
                 this.bookController.index()(req, res);
             })
             .get('/book', (req, res) => {
