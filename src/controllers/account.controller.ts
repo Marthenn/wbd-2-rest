@@ -27,7 +27,7 @@ export class AccountController {
             }
 
             const account = await Account.createQueryBuilder('account')
-                .select(['account.uid', 'account.password', 'account.isAdmin'])
+                .select(['account.uid', 'account.password', 'account.isAdmin', 'account.username', 'account.profilePicDirectory'])
                 .where('account.username = :username', { username })
                 .getOne()
             if (!account) {
@@ -38,6 +38,7 @@ export class AccountController {
             }
 
             const isMatch = await bcrypt.compare(password, account.password);
+
             if (!isMatch) {
                 res.status(StatusCodes.UNAUTHORIZED).json({
                     message: "Invalid credentials"
@@ -45,9 +46,13 @@ export class AccountController {
                 return
             }
 
-            const { uid, isAdmin } = account;
-            const payload: AuthToken = {
-                uid, isAdmin
+            const { uid, isAdmin, profilePicDirectory } = account;
+            const usernameNew = account.username;
+            const payload= {
+                uid,
+                isAdmin,
+                usernameNew,
+                profilePicDirectory
             }
             const token = jwt.sign(payload, jwtConfig.secret, {
                 expiresIn: jwtConfig.expiresIn

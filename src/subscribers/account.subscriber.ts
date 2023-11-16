@@ -16,13 +16,13 @@ export class AccountSubscriber implements EntitySubscriberInterface<Account>{
         return Account;
     }
 
-    async beforeInsert(event: InsertEvent<Account>): Promise<void> {
-        event.entity.password = await bcrypt.hash(event.entity.password, bcryptConfig.SaltRounds);
-    }
-
-    async beforeUpdate(event: UpdateEvent<Account>): Promise<void> {
-        if (event.entity && event.entity.password !== event.databaseEntity.password) {
-            event.entity.password = await bcrypt.hash(event.entity.password, bcryptConfig.SaltRounds);
-        }
-    }
+    // async beforeInsert(event: InsertEvent<Account>): Promise<void> {
+    //     event.entity.password = await bcrypt.hash(event.entity.password, bcryptConfig.SaltRounds);
+    // }
+    //
+    // async beforeUpdate(event: UpdateEvent<Account>): Promise<void> {
+    //     if (event.entity && event.entity.password !== event.databaseEntity.password) {
+    //         event.entity.password = await bcrypt.hash(event.entity.password, bcryptConfig.SaltRounds);
+    //     }
+    // }
 }

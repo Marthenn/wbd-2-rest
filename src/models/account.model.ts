@@ -19,7 +19,7 @@ export class Account extends BaseEntity {
     @Column({name:'username'})
     username: string
 
-    @Column({name:'password'})
+    @Column({name:'password', type: 'text'})
     password: string
 
     @Column({name:'email'})
