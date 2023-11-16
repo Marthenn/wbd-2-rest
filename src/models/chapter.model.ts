@@ -11,8 +11,8 @@ export class Chapter extends BaseEntity { // no book_id since it's joined there 
     @PrimaryGeneratedColumn({name:'chapter_id'})
     chapterId: number
 
-    @Column()
-    chapter: number
+    @Column({name:'chapter'})
+    chapter: string
 
     @Column({name:'transcript_directory', nullable: true})
     transcriptDirectory: string
