@@ -24,6 +24,8 @@ export class BookController {
                     .addSelect('book.title', 'title')
                     .addSelect('book.duration', 'duration')
                     .addSelect('AVG(rating.rating)', 'averageRating')
+                    .addSelect('book.cover_image_directory', 'cover_image_directory')
+                    .addSelect('book.author', 'author')
                     .innerJoin(Book, 'book', 'book.book_id = rating.book_id')
                     .groupBy('book.book_id, book.title, book.duration')
                     .offset((page - 1) * itemsPerPage)  // Calculate the offset based on the page number
@@ -66,7 +68,7 @@ export class BookController {
 
     bookDetails() {
         return async (req: Request, res: Response) => {
-            console.log("Handling /book/:id request");
+            console.log("Handling /book/:book_id request");
             try {
                 const bookDetails = await Rating.createQueryBuilder('rating')
                     .select('book.book_id', 'book_id')
@@ -76,7 +78,7 @@ export class BookController {
                     .addSelect('book.cover_image_directory', 'cover_image_directory')
                     .addSelect('AVG(rating.rating)', 'averageRating')
                     .innerJoin(Book, 'book', 'book.book_id = rating.book_id')
-                    .where('book.book_id = :id', { id: parseInt(req.params.id) })
+                    .where('book.book_id = :book_id', { book_id: parseInt(req.params.book_id) })
                     .groupBy('book.book_id, book.title, book.duration, book.description, book.cover_image_directory')
                     .getRawOne();
                 res.status(StatusCodes.OK).json({
@@ -95,12 +97,12 @@ export class BookController {
 
     chapterNames() {
         return async (req: Request, res: Response) => {
-            console.log("Handling /book/:id/chapternames request");
+            console.log("Handling /book/:book_id/chapternames request");
             try {
                 const chapterNames = await Chapter.createQueryBuilder('chapter')
                 .select('chapter.chapter_id', 'chapterId')
                 .addSelect('chapter.chapter_name', 'chapterName')
-                .innerJoin('chapter.book', 'book', 'book.book_id = :id', { id: parseInt(req.params.id) })
+                .innerJoin('chapter.book', 'book', 'book.book_id = :book_id', { book_id: parseInt(req.params.book_id) })
                 .getRawMany();
                 res.status(StatusCodes.OK).json({
                     message: ReasonPhrases.OK,
@@ -119,15 +121,6 @@ export class BookController {
     chapterDetails() {
         return async (req: Request, res: Response) => {
             
-            let chapterId;
-            if (parseInt(req.params.chapter_id)) {
-                console.log("Handling /book/:book_id/chapter/:chapter_id request");
-                chapterId = parseInt(req.params.chapter_id);
-            } else {
-                console.log("Handling /book/:book_id/chapter request");
-                chapterId = 1;
-            }
-            
             try {
                 const chapterDetails = await Chapter.createQueryBuilder('chapter')
                 .select('chapter.chapter_name', 'chapter_name')
@@ -135,7 +128,7 @@ export class BookController {
                 .addSelect('chapter.audio_directory', 'audio_directory')
                 .addSelect('book.title', 'title')
                 .innerJoin(Book, 'book', 'book.book_id = chapter.book_id')
-                .where('chapter.chapter_id = :chapter_id', { chapter_id: chapterId })
+                .where('chapter.chapter_id = :chapter_id', { chapter_id: parseInt(req.params.chapter_id) })
                 .andWhere('book.book_id = :book_id', { book_id: parseInt(req.params.book_id) })
                 .getRawMany();
                 res.status(StatusCodes.OK).json({

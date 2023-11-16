@@ -27,20 +27,16 @@ export class BookRoute {
                 console.log("Handling /book/count request");
                 this.bookController.bookCount()(req, res);
             })
-            .get('/book/:id', (req, res) => {
-                console.log("Handling /book/:id request");
+            .get('/book/:book_id', (req, res) => {
+                console.log("Handling /book/:book_id request");
                 this.bookController.bookDetails()(req, res);
             })
-            .get('/book/:id/chapternames', (req, res) => {
-                console.log("Handling /book/:id/chapternames request");
+            .get('/book/:book_id/chapternames', (req, res) => {
+                console.log("Handling /book/:book_id/chapternames request");
                 this.bookController.chapterNames()(req, res);
             })
-            .get('/book/:id/chapter', (req, res) => {
-                console.log("Handling /book/:id/chapter request");
-                this.bookController.chapterDetails()(req, res);
-            })
-            .get('/book/:id/chapter/:chapter_id', (req, res) => {
-                console.log("Handling /book/:id/chapter/:chapter_id request");
+            .get('/book/:book_id/chapter/:chapter_id', (req, res) => {
+                console.log("Handling /book/:book_id/chapter/:chapter_id request");
                 this.bookController.chapterDetails()(req, res);
             })
     }
