@@ -93,13 +93,13 @@ export class AccountController {
                     .select(['account.uid', 'account.email'])
                     .where('account.email = :email', { email })
                     .getOne()
-                if (!account) {
+                if (account === null) {
                     res.status(StatusCodes.OK).json({
-                        message: true
+                        message: false
                     })
                 } else {
                     res.status(StatusCodes.OK).json({
-                        message: false
+                        message: true
                     })
                 }
             } catch (error : any) {
