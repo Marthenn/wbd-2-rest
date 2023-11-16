@@ -98,7 +98,8 @@ export class BookController {
             console.log("Handling /book/:id/chapternames request");
             try {
                 const chapterNames = await Chapter.createQueryBuilder('chapter')
-                .select('chapter.chapter_name', 'chapterName')
+                .select('chapter.chapter_id', 'chapterId')
+                .addSelect('chapter.chapter_name', 'chapterName')
                 .innerJoin('chapter.book', 'book', 'book.book_id = :id', { id: parseInt(req.params.id) })
                 .getRawMany();
                 res.status(StatusCodes.OK).json({
@@ -115,6 +116,40 @@ export class BookController {
         };        
     }
 
-
+    chapterDetails() {
+        return async (req: Request, res: Response) => {
+            
+            let chapterId;
+            if (parseInt(req.params.chapter_id)) {
+                console.log("Handling /book/:book_id/chapter/:chapter_id request");
+                chapterId = parseInt(req.params.chapter_id);
+            } else {
+                console.log("Handling /book/:book_id/chapter request");
+                chapterId = 1;
+            }
+            
+            try {
+                const chapterDetails = await Chapter.createQueryBuilder('chapter')
+                .select('chapter.chapter_name', 'chapter_name')
+                .addSelect('chapter.transcript_directory', 'transcript_directory')
+                .addSelect('chapter.audio_directory', 'audio_directory')
+                .addSelect('book.title', 'title')
+                .innerJoin(Book, 'book', 'book.book_id = chapter.book_id')
+                .where('chapter.chapter_id = :chapter_id', { chapter_id: chapterId })
+                .andWhere('book.book_id = :book_id', { book_id: parseInt(req.params.book_id) })
+                .getRawMany();
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                    chapterDetails,
+                });
+                console.log(chapterDetails);
+            } catch (error) {
+                console.error(error);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        };    
+    }
 }
 

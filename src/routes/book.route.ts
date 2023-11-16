@@ -35,5 +35,13 @@ export class BookRoute {
                 console.log("Handling /book/:id/chapternames request");
                 this.bookController.chapterNames()(req, res);
             })
+            .get('/book/:id/chapter', (req, res) => {
+                console.log("Handling /book/:id/chapter request");
+                this.bookController.chapterDetails()(req, res);
+            })
+            .get('/book/:id/chapter/:chapter_id', (req, res) => {
+                console.log("Handling /book/:id/chapter/:chapter_id request");
+                this.bookController.chapterDetails()(req, res);
+            })
     }
 }
