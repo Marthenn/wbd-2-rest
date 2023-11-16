@@ -9,10 +9,8 @@ export class BookController {
         return async (req: Request, res: Response) => {
             let page;
             if (parseInt(req.params.page)) {
-                console.log("Handling /book/:page request"); // Add this line for debugging
                 page = parseInt(req.params.page);
             } else {
-                console.log("Handling /book request"); // Add this line for debugging
                 page = 1;
             }
             
@@ -47,7 +45,6 @@ export class BookController {
 
     bookCount() {
         return async (req: Request, res: Response) => {
-            console.log("Handling /book/count request"); // Add this line for debugging
             try {
                 const bookCount = await Book.createQueryBuilder('book')
                     .select('COUNT(*)', 'bookCount')
@@ -68,7 +65,14 @@ export class BookController {
 
     bookDetails() {
         return async (req: Request, res: Response) => {
-            console.log("Handling /book/:book_id request");
+            
+            let bookId;
+            if(parseInt(req.params.book_id)) {
+                bookId = parseInt(req.params.book_id);
+            } else {
+                bookId = 1;
+            }
+
             try {
                 const bookDetails = await Rating.createQueryBuilder('rating')
                     .select('book.book_id', 'book_id')
@@ -77,8 +81,10 @@ export class BookController {
                     .addSelect('book.description', 'description')
                     .addSelect('book.cover_image_directory', 'cover_image_directory')
                     .addSelect('AVG(rating.rating)', 'averageRating')
+                    .addSelect('book.author', 'author')
+                    .addSelect('book.category', 'category')
                     .innerJoin(Book, 'book', 'book.book_id = rating.book_id')
-                    .where('book.book_id = :book_id', { book_id: parseInt(req.params.book_id) })
+                    .where('book.book_id = :book_id', { book_id: bookId })
                     .groupBy('book.book_id, book.title, book.duration, book.description, book.cover_image_directory')
                     .getRawOne();
                 res.status(StatusCodes.OK).json({
@@ -97,7 +103,6 @@ export class BookController {
 
     chapterNames() {
         return async (req: Request, res: Response) => {
-            console.log("Handling /book/:book_id/chapternames request");
             try {
                 const chapterNames = await Chapter.createQueryBuilder('chapter')
                 .select('chapter.chapter_id', 'chapterId')
