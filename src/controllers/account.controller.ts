@@ -15,7 +15,54 @@ interface TokenRequest {
     password: string
 }
 
+import * as fs from "fs";
+import * as path from "path";
+
 export class AccountController {
+    accountDetails() {
+        return async (req: Request, res: Response) => {
+            try {
+                const acc = await Account.createQueryBuilder('account')
+                    .select(['account.uid', 'account.username', 'account.email', 'account.joinedDate', 'account.expiredDate', 'account.isAdmin', 'account.profilePicDirectory'])
+                    .where('account.uid = :uid', { uid: parseInt(req.params.uid) })
+                    .getOne();
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                    account: acc
+                });
+                console.log(acc);
+            } catch (error : any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR
+                })
+            }
+        }
+    }
+
+    updateAccountDetails() {
+        return async (req: Request, res: Response) => {
+            try {
+                const acc = await Account.createQueryBuilder('account')
+                    .select(['account.uid', 'account.username', 'account.email', 'account.joinedDate', 'account.expiredDate', 'account.isAdmin', 'account.profilePicDirectory'])
+                    .where('account.uid = :uid', { uid: parseInt(req.params.uid) })
+                    .getOne();
+                // TODO: Check file
+                const oldFilename = acc.profilePicDirectory;
+                fs.unlinkSync(path.join(__dirname, `../../public/image/${oldFilename}`));
+                acc.username = req.body.username;
+                acc.email = req.body.email;
+                acc.profilePicDirectory = req.body.profilePicDirectory;
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                });
+            } catch (error : any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR
+                })
+            }
+        }
+    }
+
     token() {
         return async (req: Request, res: Response) => {
             const { username, password }: TokenRequest = req.body;
