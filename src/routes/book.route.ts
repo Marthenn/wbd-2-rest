@@ -21,7 +21,7 @@ export class BookRoute {
             })
             .get('/book/count', (req, res) => {
                 console.log("Handling /book request");
-                this.bookController.index()(req, res);
+                this.bookController.bookCount()(req, res);
             })
             .get('/book/:id', (req, res) => {
                 console.log("Handling /book/:id request");
