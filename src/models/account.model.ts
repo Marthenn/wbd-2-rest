@@ -34,6 +34,9 @@ export class Account extends BaseEntity {
     @Column({name:'is_admin'})
     isAdmin: boolean
 
+    @Column({name:'profile_pic_directory', nullable: true})
+    profilePicDirectory: string
+
     @OneToMany(() => History, history => history.account, {cascade: true})
     @JoinColumn({name:'uid'})
     histories: History[]
