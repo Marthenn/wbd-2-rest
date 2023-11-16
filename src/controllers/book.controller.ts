@@ -4,6 +4,8 @@ import { Book } from '../models/book.model';
 import { Rating } from '../models/rating.model';
 import { Chapter } from '../models/chapter.model';
 import { Favorite } from '../models/favorite.model';
+import { createConnection } from 'typeorm';
+import { Account } from "../models/account.model";
 
 export class BookController {
     index() {
@@ -247,12 +249,81 @@ export class BookController {
             } catch (error: any) {
                 console.error(error);
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                    // message: ReasonPhrases.INTERNAL_SERVER_ERROR,
-                    message: error.message,
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
                 });
             }
         };
     }
 
+    addFavoriteBook() {
+        return async (req: Request, res: Response) => {
+
+            try {
+                const favoriteBookIdRaw = await Book.createQueryBuilder('book')
+                    .distinctOn(['book.book_id'])
+                    .select('book.book_id as book_id')
+                    .innerJoin('favorite_book', 'favorite_book', 'favorite_book.book_id = book.book_id')
+                    .innerJoin('favorite', 'favorite', 'favorite.favorite_id = favorite_book.favorite_id')
+                    .where('favorite.uid = :uid', { uid: parseInt(req.params.uid) })
+                    .groupBy('book.book_id')
+                    .getRawMany();
+                let bookIdList = favoriteBookIdRaw.map((favoriteBookIdRaw) => favoriteBookIdRaw.book_id);
+                bookIdList.push(parseInt(req.params.book_id));
+                console.log(bookIdList);
+                const account = await Account.findOneBy({ uid: parseInt(req.params.uid) });
+                const books = await Book.findByIds(bookIdList);
+
+                const newFavorite = new Favorite();
+                newFavorite.account = account;
+                newFavorite.books = books;
+                const newFavoriteStatus = await newFavorite.save();
+
+                if (!newFavoriteStatus) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: ReasonPhrases.BAD_REQUEST,
+                    });
+                    return;
+                }
+
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                });
+            } catch(error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        }
+    }
+
+    deleteFavoriteBook() {
+        return async (req: Request, res: Response) => {
+            try {
+                const favoriteBookIdRaw = await Favorite.createQueryBuilder('favorite')
+                    .innerJoin('favorite.books', 'favoriteBook', 'favoriteBook.bookId = :book_id', { book_id: parseInt(req.params.book_id) })
+                    .where('favorite.uid = :uid', { uid : parseInt(req.params.uid) })
+                    .select('favorite.favoriteId')
+                    .getOne();
+                const favoriteBookId = favoriteBookIdRaw.favoriteId;
+                const favorite = await Favorite.findOneBy({ favoriteId: favoriteBookId });
+                const deleteFavoriteBookStatus = await favorite.remove();
+                if (!deleteFavoriteBookStatus) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: ReasonPhrases.BAD_REQUEST,
+                    });
+                    return;
+                }
+
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                });
+
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        }
+    }
 }
 
