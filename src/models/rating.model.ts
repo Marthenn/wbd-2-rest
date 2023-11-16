@@ -18,11 +18,11 @@ export class Rating extends BaseEntity {
     @Column({name: 'rating', type: "real"})
     rating: number
 
-    @ManyToOne(() => Book)
+    @ManyToOne(() => Book, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     @JoinColumn({name: 'book_id'})
     book: Book
 
-    @ManyToOne(() => Account)
+    @ManyToOne(() => Account, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     @JoinColumn({name: 'uid'})
     account: Account
 }

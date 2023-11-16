@@ -34,11 +34,11 @@ export class Account extends BaseEntity {
     @Column({name:'is_admin'})
     isAdmin: boolean
 
-    @OneToMany(() => History, history => history.account)
+    @OneToMany(() => History, history => history.account, {cascade: true})
     @JoinColumn({name:'uid'})
     histories: History[]
 
-    @OneToMany(() => Favorite, favorite => favorite.account)
+    @OneToMany(() => Favorite, favorite => favorite.account, {cascade: true})
     @JoinColumn({name:'uid'})
     favorites: Favorite[]
 }

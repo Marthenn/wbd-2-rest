@@ -20,7 +20,7 @@ export class Chapter extends BaseEntity { // no book_id since it's joined there 
     @Column({name:'audio_directory'})
     audioDirectory: string
     
-    @ManyToOne(() => Book, book => book.chapters)
+    @ManyToOne(() => Book, book => book.chapters, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     @JoinColumn({name:'book_id'})
     book: Book
 }

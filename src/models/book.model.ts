@@ -26,7 +26,7 @@ export class Book extends BaseEntity {
     @Column({name: 'duration'})
     duration: string
     
-    @OneToMany(() => Chapter, chapter => chapter.book)
+    @OneToMany(() => Chapter, chapter => chapter.book, {cascade: true})
     @JoinColumn({name: 'book_id'})
     chapters: Chapter[]
 

@@ -16,7 +16,7 @@ export class Favorite extends BaseEntity {
     @PrimaryGeneratedColumn({name:'favorite_id'})
     favoriteId: number
 
-    @ManyToMany(() => Book)
+    @ManyToMany(() => Book, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     @JoinTable({
         name: 'favorite_book',
         joinColumn: {
@@ -30,7 +30,7 @@ export class Favorite extends BaseEntity {
     })
     books: Book[]
 
-    @ManyToOne(() => Account)
+    @ManyToOne(() => Account, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     @JoinColumn({name:'uid'})
     account: Account
 }
