@@ -15,9 +15,17 @@ export class BookRoute {
     getRoute() {
         console.log("Setting up /book route");
         return Router()
-            .get('/book/fetch', (req, res) => {
+            .get('/book', (req, res) => {
                 console.log("Handling /book request");
                 this.bookController.index()(req, res);
-            });
+            })
+            .get('/book/count', (req, res) => {
+                console.log("Handling /book request");
+                this.bookController.index()(req, res);
+            })
+            .get('/book/:id', (req, res) => {
+                console.log("Handling /book/:id request");
+                this.bookController.bookDetails()(req, res);
+            })
     }
 }
