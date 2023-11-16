@@ -5,7 +5,8 @@ CREATE TABLE account (
     password character varying NOT NULL check(length(password) >= 8),
     email character varying NOT NULL check(email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
     joined_date timestamp without time zone NOT NULL,
-    expired_date timestamp without time zone NOT NULL
+    expired_date timestamp without time zone NOT NULL,
+    profile_pic_directory text
 );
 
 CREATE TABLE book (
