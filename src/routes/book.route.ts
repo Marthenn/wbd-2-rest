@@ -19,13 +19,21 @@ export class BookRoute {
                 console.log("Handling /book request");
                 this.bookController.index()(req, res);
             })
+            .get('/book/:page', (req, res) => {
+                console.log("Handling /book/:page request");
+                this.bookController.index()(req, res);
+            })
             .get('/book/count', (req, res) => {
-                console.log("Handling /book request");
+                console.log("Handling /book/count request");
                 this.bookController.bookCount()(req, res);
             })
             .get('/book/:id', (req, res) => {
                 console.log("Handling /book/:id request");
                 this.bookController.bookDetails()(req, res);
+            })
+            .get('/book/:id/chapternames', (req, res) => {
+                console.log("Handling /book/:id/chapternames request");
+                this.bookController.chapterNames()(req, res);
             })
     }
 }

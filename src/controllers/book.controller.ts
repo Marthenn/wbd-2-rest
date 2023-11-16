@@ -2,11 +2,22 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
 import { Book } from '../models/book.model';
 import { Rating } from '../models/rating.model';
+import { Chapter } from '../models/chapter.model';
 
 export class BookController {
     index() {
-        return async (_req: Request, res: Response) => {
-            console.log("Handling /book request"); // Add this line for debugging
+        return async (req: Request, res: Response) => {
+            let page;
+            if (parseInt(req.params.page)) {
+                console.log("Handling /book/:page request"); // Add this line for debugging
+                page = parseInt(req.params.page);
+            } else {
+                console.log("Handling /book request"); // Add this line for debugging
+                page = 1;
+            }
+            
+            const itemsPerPage = 8;
+            
             try {
                 const books = await Rating.createQueryBuilder('rating')
                     .select('book.book_id', 'book_id')
@@ -15,6 +26,8 @@ export class BookController {
                     .addSelect('AVG(rating.rating)', 'averageRating')
                     .innerJoin(Book, 'book', 'book.book_id = rating.book_id')
                     .groupBy('book.book_id, book.title, book.duration')
+                    .offset((page - 1) * itemsPerPage)  // Calculate the offset based on the page number
+                    .limit(itemsPerPage)  // Set the limit to the number of items per page
                     .getRawMany();
                 res.status(StatusCodes.OK).json({
                     message: ReasonPhrases.OK,
@@ -31,7 +44,7 @@ export class BookController {
     }
 
     bookCount() {
-        return async (_req: Request, res: Response) => {
+        return async (req: Request, res: Response) => {
             console.log("Handling /book/count request"); // Add this line for debugging
             try {
                 const bookCount = await Book.createQueryBuilder('book')
@@ -78,6 +91,28 @@ export class BookController {
                 });
             }
         };
+    }
+
+    chapterNames() {
+        return async (req: Request, res: Response) => {
+            console.log("Handling /book/:id/chapternames request");
+            try {
+                const chapterNames = await Chapter.createQueryBuilder('chapter')
+                .select('chapter.chapter_name', 'chapterName')
+                .innerJoin('chapter.book', 'book', 'book.book_id = :id', { id: parseInt(req.params.id) })
+                .getRawMany();
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                    chapterNames,
+                });
+                console.log(chapterNames);
+            } catch (error) {
+                console.error(error);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        };        
     }
 
 
