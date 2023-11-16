@@ -9,7 +9,7 @@ export class BookController {
             try {
                 const books = await Book.createQueryBuilder('book')
                     .select(['book.book_id', 'book.title', 'book.rating', 'book.duration'])
-                    .take(5)
+                    .take(8)
                     .getMany();
                 res.status(StatusCodes.OK).json({
                     message: false,
@@ -24,5 +24,7 @@ export class BookController {
             }
         };
     }
+
+    
 }
 
