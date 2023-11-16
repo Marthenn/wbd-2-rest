@@ -23,7 +23,7 @@ export class Book extends BaseEntity {
     @Column({name: 'cover_image_directory', nullable: true})
     coverImageDirectory: string
     
-    @Column()
+    @Column({name: 'duration'})
     duration: string
     
     @OneToMany(() => Chapter, chapter => chapter.book)

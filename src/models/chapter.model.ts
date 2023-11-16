@@ -19,10 +19,7 @@ export class Chapter extends BaseEntity { // no book_id since it's joined there 
 
     @Column({name:'audio_directory'})
     audioDirectory: string
-
-    @Column({name:'duration'})
-    duration: string
-
+    
     @ManyToOne(() => Book, book => book.chapters)
     @JoinColumn({name:'book_id'})
     book: Book
