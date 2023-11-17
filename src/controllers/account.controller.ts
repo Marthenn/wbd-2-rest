@@ -193,15 +193,15 @@ export class AccountController {
                     return
                 }
 
-                // hash the password
-                const salt = await bcrypt.genSalt(bcryptConfig.SaltRounds);
-                const hashedPassword = await bcrypt.hash(password, salt);
+                // // hash the password
+                // const salt = await bcrypt.genSalt(bcryptConfig.SaltRounds);
+                // const hashedPassword = await bcrypt.hash(password, salt);
 
                 // create the account
                 const account = new Account();
                 account.username = username
                 account.email = email
-                account.password = hashedPassword
+                account.password = password
                 account.isAdmin = false
                 account.joinedDate = new Date()
 
