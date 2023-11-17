@@ -32,6 +32,10 @@ export class SoapService {
             // TODO: handle response from soap
         } catch (error) {
             // TODO: handle error
+            return {
+                status: false,
+                message: error.message
+            };
         }
     }
 
@@ -58,8 +62,14 @@ export class SoapService {
             const xml = await xml2js.parseStringPromise(response.data);
 
             // TODO: handle response from soap
+            return xml['S:Envelope']['S:Body'][0]['ns2:getRequestResponse'][0].return[0];
+
         } catch (error) {
             // TODO: handle error
+            return {
+                status: false,
+                message: error.message
+            };
         }
     }
 
@@ -86,8 +96,13 @@ export class SoapService {
             const xml = await xml2js.parseStringPromise(response.data);
 
             // TODO: handle response from soap
+            return xml['soap:Envelope']['soap:Body'][0]['ns2:getRequestPageResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
+            return {
+                status: false,
+                message: error.message
+            };
         }
     }
 
@@ -142,9 +157,13 @@ export class SoapService {
 
             const xml = await xml2js.parseStringPromise(response.data);
             // TODO: handle response from soap
-
+            return xml['soap:Envelope']['soap:Body'][0]['ns2:synchronizeAccountsResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
+            return {
+                status: false,
+                message: error.message
+            };
         }
     }
 
@@ -166,8 +185,13 @@ export class SoapService {
             const xml = await xml2js.parseStringPromise(response.data);
 
             // TODO: handle response from soap
+            return xml['soap:Envelope']['soap:Body'][0]['ns2:approveRequestResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
+            return {
+                status: false,
+                message: error.message
+            };
         }
     }
 
@@ -189,8 +213,13 @@ export class SoapService {
             const xml = await xml2js.parseStringPromise(response.data);
 
             // TODO: handle response from soap
+            return xml['soap:Envelope']['soap:Body'][0]['ns2:approveRequestResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
+            return {
+                status: false,
+                message: error.message
+            };
         }
     }
 }
