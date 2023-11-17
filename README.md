@@ -22,11 +22,13 @@ Sesuai namanya, HTML dan CSS injection berarti terdapat potongan HTML dan/atau C
 
 ### JWT-Attack
 Serangan JWT-Attack terjadi ketika adanya JWT yang terkirim ke server tetapi JWT tersebut telah dimodifikasi. Umumnya serangan ini digunakan untuk membypas autentikasi guna mendapatkan akses kontrol melalui impersonifikasi pengguna yang telah terautentikasi. Salah satu metode penanganan yang paling mudah adalah dengan melakukan verify pada JWT signature. Berikut contoh serangan dengan JWT signature yang salah dari server.
-![image](https://github.com/Marthenn/wbd-2-rest/assets/89301265/61fc45ed-89c6-48e5-8721-bec296a90388)
-
+![image](https://github.com/Marthenn/wbd-2-rest/assets/89301265/61fc45ed-89c6-48e5-8721-bec296a90388
 
 ### File Upload Vulnerabilities
 File upload vulnerabilities merupakan jenis serangan yang terjadi ketika server tidak melakukan verifikasi yang baik terhadap file yang diupload. Verifikasi tersebut antara lain mengcakupi: nama, tipe, konten, dan ukuran. Ketika gagal diverifikasi, file tersebut dapat menyebabkan beberapa bahaya seperti gagalnya server karena file yang terlalu besar dan/atau dijalankannya skrip yang tidak seharusnya. Sesuai titik lemahnya, serangan ini dicegah dengan melakukan verifikasi ke file yang diupload ke server.
+
+### HTTP Parameter Pollution (HPP)
+HTTP Parametter Pollution (HPP) adalah teknik serangan yang memungkinkan penyerang untuk mendapatkan informasi rahasia melalui parameter HTTP. Salah satu contohnya adalah pada url `http://test.com/home?redirectURL=...` diganti dengan mengirim `http://test.ccom/home?redirectURL=...&redirectURL={malicious URL here}`. Salah satu cara memitigasi ini dengan menggunakan parameter HTTP yang lebih strict seperti `/favoritebook/:uid/:book_id` yang membuat parameterized HTTP bila terpolusi akan menyebabkan error.
 
 ## Pembagian Tugas
 1. Backend JWT: 13521144
