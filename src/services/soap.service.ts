@@ -42,17 +42,17 @@ export class SoapService {
     async getRequest(username: string) {
         try {
             // create request
-            console.log(`http://${soapConfig.host}:${soapConfig.port}/api/Service`);
-            console.log(
-            `<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
-                <Body>
-                    <GetRequest xmlns="http://service.webwbd/">
-                        <username xmlns="">${username}</username>
-                        <api_key xmlns="">${soapConfig.key}</api_key>
-                    </GetRequest>
-                </Body>
-            </Envelope>`
-            );
+            // console.log(`http://${soapConfig.host}:${soapConfig.port}/api/Service`);
+            // console.log(
+            // `<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+            //     <Body>
+            //         <GetRequest xmlns="http://service.webwbd/">
+            //             <username xmlns="">${username}</username>
+            //             <api_key xmlns="">${soapConfig.key}</api_key>
+            //         </GetRequest>
+            //     </Body>
+            // </Envelope>`
+            // );
             const response = await axios.post<string>(
                 `http://${soapConfig.host}:${soapConfig.port}/api/Service`,
                 `<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
@@ -72,10 +72,8 @@ export class SoapService {
             // console.log("OSIDJFOIDSJFOI")
 
             const xml = await xml2js.parseStringPromise(response.data);
-            console.log(response.data);
             // TODO: handle response from soap
-            return xml['S:Envelope']['S:Body'][0]['ns2:getRequestResponse'][0].return[0];
-            
+            return xml['S:Envelope']['S:Body'][0]['ns2:GetRequestResponse'][0].return[0];            
 
         } catch (error) {
             // TODO: handle error
@@ -198,7 +196,7 @@ export class SoapService {
             const xml = await xml2js.parseStringPromise(response.data);
 
             // TODO: handle response from soap
-            return xml['soap:Envelope']['soap:Body'][0]['ns2:approveRequestResponse'][0].return[0];
+            return xml['S:Envelope']['S:Body'][0]['ns2:approveRequestResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
             return {
@@ -215,10 +213,10 @@ export class SoapService {
                 `http://${soapConfig.host}:${soapConfig.port}/api/Service`,
                 `<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
                         <Body>
-                            <ApproveRequest xmlns="http://service.webwbd/">
-                                <username xmlns="">Hanif</username>
-                                <api_key xmlns="">15b4666c-f135-426c-8243-f030fdecaa7c</api_key>
-                            </ApproveRequest>
+                            <RejectRequest xmlns="http://service.webwbd/">
+                                <username xmlns="">${username}</username>
+                                <api_key xmlns="">${soapConfig.key}</api_key>
+                            </RejectRequest>
                         </Body>
                     </Envelope>`
             )
@@ -226,7 +224,7 @@ export class SoapService {
             const xml = await xml2js.parseStringPromise(response.data);
 
             // TODO: handle response from soap
-            return xml['soap:Envelope']['soap:Body'][0]['ns2:approveRequestResponse'][0].return[0];
+            return xml['S:Envelope']['S:Body'][0]['ns2:RejectRequestResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
             return {
