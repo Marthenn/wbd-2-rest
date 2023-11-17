@@ -23,12 +23,12 @@ export class SoapRoute {
 
     getRoute() {
         return Router()
-            .post("/membership/request",
+            .post("/membership/create/request",
                 // this.authenticationMiddleware.authenticate(),
                 // this.uploadMiddleware.upload("image"),
                 this.accountController.createRequest(),
             )
-            .post("/membership/request",
+            .post("/membership/get/request",
                 // this.authenticationMiddleware.authenticate(),
                 this.accountController.getRequest()
             )
