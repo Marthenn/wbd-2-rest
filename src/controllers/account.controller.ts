@@ -270,6 +270,7 @@ export class AccountController {
         }
     }
 
+    // TODO : check and handle the return string
     getRequest() {
         return async(req: Request, res: Response) => {
             try {
