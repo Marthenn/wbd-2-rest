@@ -53,11 +53,19 @@ export class AccountController {
                 const oldFilename = acc.profilePicDirectory;
                 fs.unlinkSync(path.join(__dirname, `../../public/image/${oldFilename}`));
                 acc.username = req.body.username;
+                acc.password = req.body.password;
                 acc.email = req.body.email;
                 acc.profilePicDirectory = req.body.profilePicDirectory;
-                res.status(StatusCodes.OK).json({
-                    message: ReasonPhrases.OK,
-                });
+                const accId = acc.save();
+                if (!accId) {
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: ReasonPhrases.BAD_REQUEST,
+                    });
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                    });
+                }
             } catch (error : any) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                     message: ReasonPhrases.INTERNAL_SERVER_ERROR
@@ -230,11 +238,11 @@ export class AccountController {
             try{
                 const username = req.body.username
                 const email = req.body.email
-                const filename = req.file!.filename;
+                const filename = 'path';
                 console.log(filename);
                 //TODO: parse file
 
-                const returnString = await this.soapService.createRequest(username,email,filename);
+                const returnString = await this.soapService.createRequest(username,email,'path');
 
                 console.log(returnString);
 
@@ -272,15 +280,61 @@ export class AccountController {
         }
     }
 
-    // TODO : check and handle the return string
     getRequest() {
         return async(req: Request, res: Response) => {
             try {
                 const username = req.body.username;
-                const returnString = await this.soapService.getRequest(username);
-                console.log(returnString);
+                const requestData = await this.soapService.getRequest(username);
                 res.status(StatusCodes.OK).json({
-                    message: returnString
+                    requestData
+                });
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: error.message
+                })
+            }
+        }
+    }
+
+    getRequestPage() {
+        return async(req: Request, res: Response) => {
+            try {
+                const username = req.body.username;
+                const requestData = await this.soapService.getRequest(username);
+                res.status(StatusCodes.OK).json({
+                    requestData
+                });
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: error.message
+                })
+            }
+        }
+    }
+
+    approveRequest() {
+        return async(req: Request, res: Response) => {
+            try {
+                const username = req.body.username;
+                const approveData = await this.soapService.getRequest(username);
+                res.status(StatusCodes.OK).json({
+                    approveData
+                });
+            } catch (error: any) {
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: error.message
+                })
+            }
+        }
+    }
+    
+    rejectRequest() {
+        return async(req: Request, res: Response) => {
+            try {
+                const username = req.body.username;
+                const rejectData = await this.soapService.getRequest(username);
+                res.status(StatusCodes.OK).json({
+                    rejectData
                 });
             } catch (error: any) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
