@@ -7,6 +7,8 @@ import { jwtConfig } from "../config/jwt.config";
 export interface AuthToken {
     uid: number;
     isAdmin: boolean;
+    username: string;
+    profilePicDirectry: string;
 }
 
 export interface AuthRequest extends Request {
