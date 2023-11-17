@@ -42,27 +42,40 @@ export class SoapService {
     async getRequest(username: string) {
         try {
             // create request
+            console.log(`http://${soapConfig.host}:${soapConfig.port}/api/Service`);
+            console.log(
+            `<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+                <Body>
+                    <GetRequest xmlns="http://service.webwbd/">
+                        <username xmlns="">${username}</username>
+                        <api_key xmlns="">${soapConfig.key}</api_key>
+                    </GetRequest>
+                </Body>
+            </Envelope>`
+            );
             const response = await axios.post<string>(
                 `http://${soapConfig.host}:${soapConfig.port}/api/Service`,
                 `<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
-                        <Body>
-                            <GetRequest xmlns="http://service.webwbd/">
-                                <username xmlns="">${username}</username>
-                                <api_key xmlns="">${soapConfig.key}</api_key>
-                            </GetRequest>
-                        </Body>
-                    </Envelope>`,
+                    <Body>
+                        <GetRequest xmlns="http://service.webwbd/">
+                            <username xmlns="">${username}</username>
+                            <api_key xmlns="">${soapConfig.key}</api_key>
+                        </GetRequest>
+                    </Body>
+                </Envelope>`,
                 {
                     headers: {
                         "Content-Type": "text/xml"
                     }
                 }
             )
+            // console.log("OSIDJFOIDSJFOI")
 
             const xml = await xml2js.parseStringPromise(response.data);
-
+            console.log(response.data);
             // TODO: handle response from soap
             return xml['S:Envelope']['S:Body'][0]['ns2:getRequestResponse'][0].return[0];
+            
 
         } catch (error) {
             // TODO: handle error
