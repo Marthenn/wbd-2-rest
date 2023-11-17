@@ -13,14 +13,14 @@ import * as path from "path";
 export class BookController {
     index() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token) {
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token) {
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
             // Check page parameter availability
             let page;
             if (parseInt(req.params.page)) {
@@ -67,14 +67,14 @@ export class BookController {
 
     bookCount() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token) {
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token) {
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             try {
                 // Check filter parameter availability
@@ -103,14 +103,14 @@ export class BookController {
 
     bookDetails() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || token.isAdmin) { // Only user can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             let bookId;
             if(parseInt(req.params.book_id)) {
@@ -147,21 +147,63 @@ export class BookController {
         };
     }
 
+    chapterCount() {
+        return async (req: Request, res: Response) => {
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token) {
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
+            try {
+                const chapterCount = await Chapter.createQueryBuilder('chapter')
+                    .select('chapter.chapter_id', 'chapterId')
+                    .addSelect('chapter.chapter_name', 'chapterName')
+                    .innerJoin('chapter.book', 'book', 'book.book_id = :book_id', { book_id: parseInt(req.params.book_id) })
+                    .getCount();
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                    chapterCount,
+                });
+                console.log(chapterCount);
+            } catch (error) {
+                console.error(error);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        };  
+    }
+
     chapterNames() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token) {
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token) {
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
+
+            const chapterPerPage = 5;
+            // Check page parameter availability
+            let page;
+            if (parseInt(req.params.page)) {
+                page = parseInt(req.params.page);
+            } else {
+                page = 1;
+            }
+
             try {
                 const chapterNames = await Chapter.createQueryBuilder('chapter')
                 .select('chapter.chapter_id', 'chapterId')
                 .addSelect('chapter.chapter_name', 'chapterName')
                 .innerJoin('chapter.book', 'book', 'book.book_id = :book_id', { book_id: parseInt(req.params.book_id) })
+                .offset((page - 1) * chapterPerPage)
+                .limit(chapterPerPage)
                 .getRawMany();
                 res.status(StatusCodes.OK).json({
                     message: ReasonPhrases.OK,
@@ -179,14 +221,14 @@ export class BookController {
 
     chapterDetails() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || token.isAdmin) { // Only user can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             try {
                 const chapterDetails = await Chapter.createQueryBuilder('chapter')
@@ -215,14 +257,14 @@ export class BookController {
 
     favoriteBookList() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || token.isAdmin) { // Only user can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             // Check page parameter availability
             let page;
@@ -276,14 +318,14 @@ export class BookController {
 
     favoriteBookCount() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || token.isAdmin) { // Only user can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             // Check filter parameter availability
             let filterBook = "";
@@ -317,14 +359,14 @@ export class BookController {
 
     addFavoriteBook() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || token.isAdmin) { // Only user can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
             
             try {
                 const favoriteBookIdRaw = await Book.createQueryBuilder('book')
@@ -366,14 +408,14 @@ export class BookController {
 
     deleteFavoriteBook() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || token.isAdmin) { // Only user can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             try {
                 const favoriteBookIdRaw = await Favorite.createQueryBuilder('favorite')
@@ -406,14 +448,14 @@ export class BookController {
     // Check if rating is null or not, for differentiating between addRating (POST) and updateRating (PUT)
     ratingStatus() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || token.isAdmin) { // Only user can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             try {
                 const rating = await Rating.createQueryBuilder('rating')
@@ -443,14 +485,14 @@ export class BookController {
 
     addRating() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || token.isAdmin) { // Only user can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             try {
                 const rating = new Rating();
@@ -477,14 +519,14 @@ export class BookController {
 
     updateRating() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || token.isAdmin) { // Only user can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             try {
                 const rating = await Rating.createQueryBuilder('rating')
@@ -512,14 +554,14 @@ export class BookController {
 
     addChapter() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || !token.isAdmin) { // Only admin can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || !token.isAdmin) { // Only admin can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             try {
                 const chapter = new Chapter();
@@ -547,14 +589,14 @@ export class BookController {
 
     updateChapter() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || !token.isAdmin) { // Only admin can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || !token.isAdmin) { // Only admin can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             try {
                 const chapter = await Chapter.createQueryBuilder('chapter')
@@ -565,7 +607,8 @@ export class BookController {
                 fs.unlinkSync(path.join(__dirname, `../../public/audio/${oldFilename}`));
                 chapter.chapterName = req.body.chapterName;
                 chapter.transcript = req.body.transcript;
-                chapter.audioDirectory = req.body.audioDirectory;
+                // chapter.audioDirectory = req.body.audioDirectory;
+                chapter.audioDirectory = req.file!.filename;
                 chapter.book = await Book.findOneBy({ bookId: parseInt(req.params.book_id) });
                 const chapterId = await chapter.save();
                 if (!chapterId) {
@@ -587,14 +630,14 @@ export class BookController {
 
     deleteChapter() {
         return async (req: Request, res: Response) => {
-            // TODO: Uncomment token
-            // const { token } = req as AuthRequest;
-            // if (!token || !token.isAdmin) { // Only admin can access this method
-            //     res.status(StatusCodes.UNAUTHORIZED).json({
-            //         message: ReasonPhrases.UNAUTHORIZED,
-            //     });
-            //     return;
-            // }
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || !token.isAdmin) { // Only admin can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
 
             try {
                 const chapter = await Chapter.createQueryBuilder('chapter')
