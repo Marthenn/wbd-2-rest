@@ -107,7 +107,7 @@ export class SoapService {
             const xml = await xml2js.parseStringPromise(response.data);
 
             // TODO: handle response from soap
-            return xml['soap:Envelope']['soap:Body'][0]['ns2:getRequestPageResponse'][0].return[0];
+            return xml['soap:Envelope']['soap:Body'][0]['ns2:GetRequestPageResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
             return {
@@ -168,7 +168,7 @@ export class SoapService {
 
             const xml = await xml2js.parseStringPromise(response.data);
             // TODO: handle response from soap
-            return xml['soap:Envelope']['soap:Body'][0]['ns2:synchronizeAccountsResponse'][0].return[0];
+            return xml['soap:Envelope']['soap:Body'][0]['ns2:SynchronizeAccountsResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
             return {
@@ -196,7 +196,7 @@ export class SoapService {
             const xml = await xml2js.parseStringPromise(response.data);
 
             // TODO: handle response from soap
-            return xml['S:Envelope']['S:Body'][0]['ns2:approveRequestResponse'][0].return[0];
+            return xml['S:Envelope']['S:Body'][0]['ns2:ApproveRequestResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
             return {
@@ -212,19 +212,19 @@ export class SoapService {
             const response = await axios.post<string>(
                 `http://${soapConfig.host}:${soapConfig.port}/api/Service`,
                 `<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
-                        <Body>
-                            <RejectRequest xmlns="http://service.webwbd/">
-                                <username xmlns="">${username}</username>
-                                <api_key xmlns="">${soapConfig.key}</api_key>
-                            </RejectRequest>
-                        </Body>
-                    </Envelope>`
+                <Body>
+                    <DeclineRequest xmlns="http://service.webwbd/">
+                        <username xmlns="">${username}</username>
+                        <api_key xmlns="">${soapConfig.key}</api_key>
+                    </DeclineRequest>
+                </Body>
+            </Envelope>`
             )
 
             const xml = await xml2js.parseStringPromise(response.data);
 
             // TODO: handle response from soap
-            return xml['S:Envelope']['S:Body'][0]['ns2:RejectRequestResponse'][0].return[0];
+            return xml['S:Envelope']['S:Body'][0]['ns2:DeclineRequestResponse'][0].return[0];
         } catch (error) {
             // TODO: handle error
             return {

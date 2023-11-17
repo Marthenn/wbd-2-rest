@@ -234,7 +234,7 @@ export class BookController {
                 const chapterDetails = await Chapter.createQueryBuilder('chapter')
                 .select('chapter.chapter_id', 'chapter_id')
                 .addSelect('chapter.chapter_name', 'chapter_name')
-                .addSelect('chapter.transcript_directory', 'transcript_directory')
+                .addSelect('chapter.transcript', 'transcript')
                 .addSelect('chapter.audio_directory', 'audio_directory')
                 .addSelect('book.title', 'title')
                 .innerJoin(Book, 'book', 'book.book_id = chapter.book_id')

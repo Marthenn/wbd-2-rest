@@ -25,13 +25,24 @@ export class SoapRoute {
         return Router()
             .post("/membership/request",
                 // this.authenticationMiddleware.authenticate(),
-                this.uploadMiddleware.upload("image"),
+                // this.uploadMiddleware.upload("image"),
                 this.accountController.createRequest(),
             )
-            .get(
-                "/membership/request",
+            .post("/membership/request",
                 // this.authenticationMiddleware.authenticate(),
                 this.accountController.getRequest()
+            )
+            .post("/membership/request/approval",
+                // this.authenticationMiddleware.authenticate(),
+                this.accountController.approveRequest()
+            )
+            .post("/membership/request/disapproval",
+                // this.authenticationMiddleware.authenticate(),
+                this.accountController.rejectRequest()
+            )
+            .post("/membership/request/25",
+                // this.authenticationMiddleware.authenticate(),
+                this.accountController.getRequestPage()            
             )
     }
 }
