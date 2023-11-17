@@ -68,8 +68,9 @@ export class AccountController {
 
     token() {
         return async (req: Request, res: Response) => {
-            const { username, password }: TokenRequest = req.body;
-            if (!username || !password) {
+            const usernameReq = req.body.username
+            const password = req.body.password
+            if (!usernameReq || !password) {
                 res.status(StatusCodes.BAD_REQUEST).json({
                     message: ReasonPhrases.BAD_REQUEST
                 })
@@ -78,7 +79,7 @@ export class AccountController {
 
             const account = await Account.createQueryBuilder('account')
                 .select(['account.uid', 'account.password', 'account.isAdmin', 'account.username', 'account.profilePicDirectory'])
-                .where('account.username = :username', { username })
+                .where('account.username = :username', { username: usernameReq })
                 .getOne()
             if (!account) {
                 res.status(StatusCodes.UNAUTHORIZED).json({
@@ -97,11 +98,11 @@ export class AccountController {
             }
 
             const { uid, isAdmin, profilePicDirectory } = account;
-            const usernameNew = account.username;
+            const username = account.username;
             const payload= {
                 uid,
                 isAdmin,
-                usernameNew,
+                username,
                 profilePicDirectory
             }
             const token = jwt.sign(payload, jwtConfig.secret, {
