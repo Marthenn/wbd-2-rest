@@ -9,6 +9,7 @@ import {
 import { jwtConfig } from "../config/jwt.config";
 import { Account } from "../models/account.model";
 import {bcryptConfig} from "../config/bcrypt.config";
+import { SoapService } from "../services/soap.service";
 
 interface TokenRequest {
     username: string,
@@ -19,6 +20,8 @@ import * as fs from "fs";
 import * as path from "path";
 
 export class AccountController {
+    soapService = new SoapService()
+
     accountDetails() {
         return async (req: Request, res: Response) => {
             try {
@@ -213,6 +216,44 @@ export class AccountController {
                     message: "Account created successfully",
                 })
             } catch (error : any){
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: error.message
+                })
+            }
+        }
+    }
+
+    createRequest(){
+        return async(req: Request, res: Response) => {
+            try{
+                const username = req.body.username
+                const email = req.body.email
+
+                //TODO: parse file
+
+                const returnString = await this.soapService.createRequest(username,email,/* TODO: fill with the diirectory */);
+
+                //TODO: handle the response (code belows are example only)
+                if(returnString == 'A pending request already exists'){
+                    res.status(/*TODO: fill this*/){
+                        // TODO: fill this
+                    }
+                } else if (returnString == 'Admin cannot create request'){
+
+                } else if (returnString == 'Account with the specified username already exists with different email'){
+
+                } else if (returnString == 'Account with the specified email already exists with different username'){
+
+                } else if (returnString == 'Request created successfully'){
+
+                } else if (returnString == 'Admin cannot create request'){
+
+                } else if (returnString == 'Failed to create request'){
+
+                } else {
+
+                }
+            } catch (error:any){
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                     message: error.message
                 })

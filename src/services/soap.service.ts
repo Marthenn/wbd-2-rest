@@ -28,7 +28,7 @@ export class SoapService {
             )
 
             const xml = await xml2js.parseStringPromise(response.data);
-
+            return(xml['S:Envelope']['S:Body'][0]['ns2:CreateRequestResponse'][0].return[0])
             // TODO: handle response from soap
         } catch (error) {
             // TODO: handle error
