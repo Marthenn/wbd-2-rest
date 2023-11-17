@@ -47,6 +47,10 @@ export class BookRoute {
                 this.authenticationMiddleware.authenticate(),
                 this.bookController.bookCount()
             )    // get book count
+            .get('/book/favoritestatus/:uid/:book_id',
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.isFavoriteBook()
+            ) // get favorite book status
             .get('/book/:page?/:filter?', 
                 // TODO: uncomment token
                 this.authenticationMiddleware.authenticate(),

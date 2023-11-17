@@ -255,6 +255,42 @@ export class BookController {
         };    
     }
 
+    isFavoriteBook() {
+        return async (req: Request, res: Response) => {
+            // TODO: Check token in methods
+            const { token } = req as AuthRequest;
+            if (!token || token.isAdmin) { // Only user can access this method
+                res.status(StatusCodes.UNAUTHORIZED).json({
+                    message: ReasonPhrases.UNAUTHORIZED,
+                });
+                return;
+            }
+            try {
+                const isFavoriteBook = await Favorite.createQueryBuilder('favorite')
+                    .innerJoin('favorite.books', 'favoriteBook', 'favoriteBook.bookId = :book_id', { book_id: parseInt(req.params.book_id) })
+                    .where('favorite.uid = :uid', { uid : parseInt(req.params.uid) })
+                    .select('favorite.favoriteId')
+                    .getOne();
+                if (!isFavoriteBook) {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                        isFavoriteBook: false,
+                    });
+                } else {
+                    res.status(StatusCodes.OK).json({
+                        message: ReasonPhrases.OK,
+                        isFavoriteBook: true,
+                    });
+                }
+            } catch (error: any) {
+                console.error(error);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                })
+            }
+        }
+    }
+
     favoriteBookList() {
         return async (req: Request, res: Response) => {
             // TODO: Check token in methods
