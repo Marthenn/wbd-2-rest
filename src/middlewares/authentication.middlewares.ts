@@ -9,6 +9,7 @@ export interface AuthToken {
     isAdmin: boolean;
     username: string;
     profilePicDirectry: string;
+    email: string;
 }
 
 export interface AuthRequest extends Request {

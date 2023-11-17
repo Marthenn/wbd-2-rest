@@ -78,7 +78,7 @@ export class AccountController {
             }
 
             const account = await Account.createQueryBuilder('account')
-                .select(['account.uid', 'account.password', 'account.isAdmin', 'account.username', 'account.profilePicDirectory'])
+                .select(['account.uid', 'account.password', 'account.isAdmin', 'account.username', 'account.profilePicDirectory', 'account.email'])
                 .where('account.username = :username', { username: usernameReq })
                 .getOne()
             if (!account) {
@@ -103,7 +103,8 @@ export class AccountController {
                 uid,
                 isAdmin,
                 username,
-                profilePicDirectory
+                profilePicDirectory,
+                email: account.email
             }
             const token = jwt.sign(payload, jwtConfig.secret, {
                 expiresIn: jwtConfig.expiresIn
