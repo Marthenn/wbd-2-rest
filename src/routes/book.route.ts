@@ -20,146 +20,87 @@ export class BookRoute {
         return Router()
             .get('/book/details/:book_id/chapter/:chapter_id?', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/details/:book_id/chapter/:chapter_id GET request");
-                    this.bookController.chapterDetails()(req, res);
-                }) // get chapter details
-            .get('/book/details/:book_id/chapternames', 
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.chapterDetails()
+            )    // get chapter details
+            .get('/book/details/:book_id/chapternames/:page?', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/details/:book_id/chapternames GET request");
-                    this.bookController.chapterNames()(req, res);
-                }) // get chapter names and ids
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.chapterNames()
+            )    // get chapter names and ids
+            .get('/book/details/:book_id/count',
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.chapterCount()
+            )   // get chapter count
             .get('/book/details/:book_id?', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/details/:book_id GET request");
-                    this.bookController.bookDetails()(req, res);
-                }) // get book details
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.bookDetails()
+            )    // get book details
             .get('/book/rating/:uid/:book_id', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/rating/:uid/:book_id GET request");
-                    this.bookController.ratingStatus()(req, res);
-                }) // get rating status
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.ratingStatus()
+            )    // get rating status
             .get('/book/count/:filter?', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/count/filter? GET request");
-                    this.bookController.bookCount()(req, res);
-                }) // get book count
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.bookCount()
+            )    // get book count
             .get('/book/:page?/:filter?', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/:filter/:page GET request");
-                    this.bookController.index()(req, res);
-                }) // get book list
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.index()
+            )    // get book list
             .post('/favoritebook/:uid/:book_id', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/details/:book_id POST request");
-                    this.bookController.addFavoriteBook()(req, res);
-                }) // add favorite book
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.addFavoriteBook()
+            )    // add favorite book
             .delete('/favoritebook/:uid/:book_id', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/details/:book_id DELETE request");
-                    this.bookController.deleteFavoriteBook()(req, res);
-                }) // delete favorite book
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.deleteFavoriteBook()
+            )    // delete favorite book
             .get('/favoritebook/count/:uid/:filter?', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /favoritebook/count/:uid/:filter? GET request");
-                    this.bookController.favoriteBookCount()(req, res);
-                }) // get favorite book count
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.favoriteBookCount()
+            )    // get favorite book count
             .get('/favoritebook/:uid/:page?/:filter?', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /favoritebook/:uid/:filter/:page GET request");
-                    this.bookController.favoriteBookList()(req, res);
-                }) // get favorite book list
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.favoriteBookList()
+            )    // get favorite book list
             .post('/book/rating/:uid/:book_id', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/rating/:uid/:book_id POST request");
-                    this.bookController.addRating()(req, res);
-                }) // add rating
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.addRating()
+            )    // add rating
             .put('/book/rating/:uid/:book_id', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/rating/:uid/:book_id PUT request");
-                    this.bookController.updateRating()(req, res);
-                }) // update rating
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.updateRating()
+            )    // update rating
             .post('/book/details/:book_id/chapter', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
+                this.authenticationMiddleware.authenticate(),
                 // TODO: check file
-                (req, res, next) => {
-                    this.uploadMiddleware.upload('audio')(req, res, next);
-                },
-                (req, res) => {
-                    console.log("Handling /book/details/:book_id/chapter POST request");
-                    this.bookController.addChapter()(req, res);
-                }) // add chapter
+                this.uploadMiddleware.upload('audio'),
+                this.bookController.addChapter()
+            )    // add chapter
             .put('/book/details/:book_id/chapter/:chapter_id', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
+                this.authenticationMiddleware.authenticate(),
                 // TODO: check file
-                (req, res, next) => {
-                    this.uploadMiddleware.upload('audio')(req, res, next);
-                },
-                (req, res) => {
-                    console.log("Handling /book/details/:book_id/chapter/:chapter_id PUT request");
-                    this.bookController.updateChapter()(req, res);
-                }) // update chapter
+                this.uploadMiddleware.upload('audio'),
+                this.bookController.updateChapter()
+            ) // update chapter
             .delete('/book/details/:book_id/chapter/:chapter_id', 
                 // TODO: uncomment token
-                // (req, res, next) => {
-                //     this.authenticationMiddleware.authenticate()(req, res, next);
-                // },
-                (req, res) => {
-                    console.log("Handling /book/details/:book_id/chapter/:chapter_id DELETE request");
-                    this.bookController.deleteChapter()(req, res);
-                }) // delete chapter
+                this.authenticationMiddleware.authenticate(),
+                this.bookController.deleteChapter()
+                // delete chapter
+            )
     }
 }

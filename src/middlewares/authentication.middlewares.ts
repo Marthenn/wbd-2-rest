@@ -1,6 +1,6 @@
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
 import { jwtConfig } from "../config/jwt.config";
 
