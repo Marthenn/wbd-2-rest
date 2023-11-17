@@ -228,32 +228,58 @@ export class AccountController {
             try{
                 const username = req.body.username
                 const email = req.body.email
-
+                const filename = req.file!.filename;
+                console.log(filename);
                 //TODO: parse file
 
-                const returnString = await this.soapService.createRequest(username,email,/* TODO: fill with the diirectory */);
+                const returnString = await this.soapService.createRequest(username,email,filename);
 
-                //TODO: handle the response (code belows are example only)
+                console.log(returnString);
+
+                // //TODO: handle the response (code belows are example only)
                 if(returnString == 'A pending request already exists'){
-                    res.status(/*TODO: fill this*/){
-                        // TODO: fill this
-                    }
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: 'A pending request already exists'
+                    });
                 } else if (returnString == 'Admin cannot create request'){
-
+                    res.status(StatusCodes.UNAUTHORIZED).json({
+                        message: 'Admin cannot create request'
+                    });
                 } else if (returnString == 'Account with the specified username already exists with different email'){
-
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: 'Account with the specified username already exists with different email'
+                    });
                 } else if (returnString == 'Account with the specified email already exists with different username'){
-
+                    res.status(StatusCodes.BAD_REQUEST).json({
+                        message: 'Account with the specified email already exists with different username'
+                    });
                 } else if (returnString == 'Request created successfully'){
-
-                } else if (returnString == 'Admin cannot create request'){
-
+                    res.status(StatusCodes.OK).json({
+                        message: 'Request created successfully'
+                    });
                 } else if (returnString == 'Failed to create request'){
-
-                } else {
-
+                    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                        message: 'Failed to create request'
+                    });
                 }
             } catch (error:any){
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: error.message
+                })
+            }
+        }
+    }
+
+    getRequest() {
+        return async(req: Request, res: Response) => {
+            try {
+                const username = req.body.username;
+                const returnString = await this.soapService.getRequest(username);
+                console.log(returnString);
+                res.status(StatusCodes.OK).json({
+                    message: returnString
+                });
+            } catch (error: any) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                     message: error.message
                 })
