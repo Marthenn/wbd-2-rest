@@ -14,8 +14,9 @@ services:
     depends_on:
       - db-postgres-rest
       - redis
-    networks:
-      db-redis-api:
+    network_mode: "host"
+#    networks:
+#      db-redis-api:
 
   db-postgres-rest:
     image: postgres:16
@@ -31,8 +32,9 @@ services:
     volumes:
       - db-rest:/var/lib/postgresql/data
       - ./dbinit/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      db-redis-api:
+    network_mode: "host"
+#    networks:
+#      db-redis-api:
     command: -p 50005
   
   redis:
@@ -43,8 +45,9 @@ services:
     hostname: redis-rest-webwbd-2
     volumes:
       - redis-rest:/data
-    networks:
-      db-redis-api:
+    network_mode: "host"
+#    networks:
+#      db-redis-api:
 
-networks:
-  db-redis-api:
+#networks:
+#  db-redis-api:
