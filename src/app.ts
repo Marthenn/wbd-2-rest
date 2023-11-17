@@ -7,6 +7,7 @@ import { serverConfig } from "./config/server.config";
 import { dataConfig } from "./config/data.config";
 import { AccountRoute } from "./routes/account.route";
 import {BookRoute} from "./routes/book.route";
+import { SoapRoute } from "./routes/soap.route";
 
 export class App {
     dataSource: DataSource;
@@ -15,6 +16,7 @@ export class App {
         // TODO: add routes
         const accountRoute = new AccountRoute();
         const bookRoute = new BookRoute();
+        const soapRoute = new SoapRoute();
 
         this.dataSource = new DataSource(dataConfig);
 
@@ -26,7 +28,8 @@ export class App {
             express.urlencoded({extended: true}),
             morgan("combined"),
             accountRoute.getRoute(),
-            bookRoute.getRoute()
+            bookRoute.getRoute(),
+            soapRoute.getRoute()
             // TODO: add routes
         )
     }
