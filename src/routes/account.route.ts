@@ -22,16 +22,11 @@ export class AccountRoute {
                     console.log("Handling /account/details/:uid GET request");
                     this.accountController.accountDetails()(req, res);
                 })
-            .put('account/details/:uid',
+            .put('/account/details/:uid',
                 // TODO: check file
-                (req, res, next) => {
-                    this.uploadMiddleware.upload('image')(req, res, next);
-                },
-                (req, res) => {
-                    console.log("Handling /account/details/:uid POST request");
-                    this.accountController.updateAccountDetails()(req, res);
-                
-                })
+                    this.uploadMiddleware.upload('image'),
+                    this.accountController.updateAccountDetails()
+                )
             .post('/account/token', this.accountController.token())
             .get('/account/emailExists/:email', this.accountController.emailExist())
             .post('/account/create', this.accountController.createAccount())
